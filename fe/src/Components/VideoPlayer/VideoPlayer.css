@@ -1,0 +1,31 @@
+.video-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1360px;
+  margin-top: 50px;
+  padding: 0 20px;
+}
+
+.left-side {
+  width: 70%;
+}
+
+.right-side {
+  width: 30%;
+}
+
+.queue {
+  /* background-color: #f2f2f2; */
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 640px;
+}
+
+.queue p {
+  margin: 5px 0;
+}
+
+.current_title {
+  font-weight: bold;
+}

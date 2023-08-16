@@ -1,0 +1,66 @@
+/* YouTubeSearch.css */
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 500px;
+}
+
+.search-input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #1d72b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #155a8a;
+}
+
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: base-line;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  margin: 10px 0;
+  transition: background-color 0.3s ease;
+}
+
+.result-item:hover {
+  background-color: #bbfcff;
+}
+
+.result-image {
+  width: 50px;
+  margin-right: 10px;
+}
+
+.result-title {
+  font-size: 1rem;
+  color: #333;
+}
