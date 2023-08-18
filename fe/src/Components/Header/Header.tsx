@@ -2,7 +2,7 @@ import React from "react";
 import "./Header.css";
 
 const Header = () => {
-  return <header>AgileDrop YouTube-team</header>;
+  return <header>AgileRadio</header>;
 };
 
 export default Header;

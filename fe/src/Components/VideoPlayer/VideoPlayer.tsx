@@ -36,26 +36,18 @@ const VideoPlayer = () => {
     return () => {
       socket.disconnect();
     };
-  }, [currentVideo]);
+  }, []);
 
   const onEnd = () => {
-    if (endTriggered) return; // Если флаг уже установлен, не делаем ничего
-    setEndTriggered(true); // Устанавливаем флаг
+    if (endTriggered) return;
+    setEndTriggered(true);
 
-    const nextVideo = videoQueue.length > 1 ? videoQueue[1] : null;
-    const videoIdToRemove = currentVideo ? currentVideo.id : null; // Получаем ID текущего видео для удаления
+    const videoIdToRemove = currentVideo ? currentVideo.id : null;
 
-    if (videoIdToRemove) {
-      if (!serverEndpoint) {
-        console.error("SERVER_ENDPOINT is not defined");
-        return;
-      }
+    if (videoIdToRemove && serverEndpoint) {
       const socket = socketIOClient(serverEndpoint);
-      socket.emit("removeVideo", videoIdToRemove); // Отправляем ID видео на сервер для удаления
+      socket.emit("removeVideo", videoIdToRemove);
     }
-
-    setVideoQueue(videoQueue.slice(1));
-    setCurrentVideo(nextVideo);
   };
 
   const opts: YouTubeProps["opts"] = {

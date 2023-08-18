@@ -18,6 +18,16 @@ const io = socketIo(server, {
 // Пользовательская очередь
 let userQueue = [];
 
+// return shuffled array
+function shuffleArray(array) {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+}
+
 io.on("connection", (socket) => {
   console.log("New client connected");
   const DEFAULT_VIDEOS = [
@@ -53,7 +63,7 @@ io.on("connection", (socket) => {
     { id: "0J2QdDbelmY", title: "The Weeknd - Blinding Lights" },
   ];
 
-  let defaultQueue = [...DEFAULT_VIDEOS];
+  let defaultQueue = shuffleArray(DEFAULT_VIDEOS);
 
   // Отправка объединенной очереди клиенту
   socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
@@ -69,7 +79,7 @@ io.on("connection", (socket) => {
   // Обработчик события удаления видео из очереди
   socket.on("removeVideo", (videoId) => {
     userQueue = userQueue.filter((v) => v.id !== videoId);
-    defaultQueue = defaultQueue.filter((v) => v.id !== videoId);
+    defaultQueue = defaultQueue.filter((v) => v.id !== videoId); // Удалите нужное видео из дефолтной очереди
 
     io.emit("updateQueue", [...userQueue, ...defaultQueue]);
   });
