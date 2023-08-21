@@ -1,0 +1,31 @@
+.queue {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.video__container {
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.video__container_duration {
+  margin-left: auto;
+}
+
+.video__container_result-button {
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+  font-weigth: bold;
+  border: none;
+  background-color: rgb(13 148 136);
+  width: 24px;
+  height: 26px;
+  margin-left: 10px;
+}
+
+.video__container_result-button:hover {
+  background-color: rgb(20 184 166);
+}

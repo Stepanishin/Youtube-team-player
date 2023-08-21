@@ -7,37 +7,3 @@
   padding: 0 20px;
   gap: 50px;
 }
-
-.VideoPlayer__wrapper {
-  background-color: rgb(255 255 255);
-  border: 1px solid rgb(209 213 219);
-}
-
-.left-side {
-  width: 100%;
-}
-
-.VideoPlayer__left-side_wrapper {
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-}
-
-.current_title {
-  font-weight: bold;
-}
-
-.queue {
-  width: 100%;
-  border-radius: 5px;
-}
-
-.video__container {
-  border-top: 1px solid #ccc;
-  padding: 10px;
-  display: flex;
-}
-
-.video__container_duration {
-  margin-left: auto;
-}

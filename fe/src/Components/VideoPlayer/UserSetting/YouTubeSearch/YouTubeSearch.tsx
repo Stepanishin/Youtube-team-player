@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import { VideoItem } from "../VideoPlayer/VideoPlayer";
 import "./YouTubeSearch.css";
-import { formatDuration } from "../../helpers/formatDuration";
+import { formatDuration } from "../../../../helpers/formatDuration";
+import { VideoItem } from "../../../../types/VideoItem";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
-  apiKey: string | undefined;
 }
 
-const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
-  onVideoSelect,
-  apiKey,
-}) => {
+const YouTubeSearch: React.FC<YouTubeSearchProps> = ({ onVideoSelect }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
 
@@ -21,14 +17,11 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
 
   const searchYouTube = async (e: any) => {
     e.preventDefault();
-    if (!apiKey) {
-      console.error("API_KEY is not defined");
-      return;
-    }
 
-    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${apiKey}&type=video&maxResults=10`;
+    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${process.env.REACT_APP_API_KEY}&type=video&maxResults=10`;
     const searchResponse = await fetch(searchUrl);
     const searchData = await searchResponse.json();
+    console.log(searchData);
 
     // Get videoIds
     const videoIds = searchData.items.map((item: any) => item.id.videoId);
@@ -36,7 +29,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
     // Fetch video details
     const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds.join(
       ","
-    )}&key=${apiKey}`;
+    )}&key=${process.env.REACT_APP_API_KEY}`;
     const detailsResponse = await fetch(detailsUrl);
     const detailsData = await detailsResponse.json();
 
