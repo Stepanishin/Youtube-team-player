@@ -31,36 +31,31 @@ function shuffleArray(array) {
 io.on("connection", (socket) => {
   console.log("New client connected");
   const DEFAULT_VIDEOS = [
-    { id: "3tmd-ClpJxA", title: "Billie Eilish - Bad Guy" },
-    { id: "kXYiU_JCYtU", title: "Linkin Park - In The End" },
-    { id: "JwYX52BP2Sk", title: "Queen – Bohemian Rhapsody" },
     {
-      id: "RgKAFK5djSk",
-      title: "Wiz Khalifa - See You Again ft. Charlie Puth",
+      id: "TdrL3QxjyVw",
+      title: "Lana Del Rey - Summertime Sadness",
+      duration: "4:25",
     },
-    { id: "09R8_2nJtjg", title: "Maroon 5 - Sugar" },
-    { id: "CevxZvSJLk8", title: "Katy Perry - Roar" },
-    { id: "YQHsXMglC9A", title: "Adele - Rolling in the Deep" },
-    { id: "fLexgOxsZu0", title: "Justin Bieber - Sorry" },
-    { id: "ktvTqknDobU", title: "Rihanna - Diamonds" },
-    { id: "QGJuMBdaqIw", title: "Madonna - Like A Prayer" },
-    { id: "dQw4w9WgXcQ", title: "Rick Astley - Never Gonna Give You Up" },
-    { id: "eVTXPUF4Oz4", title: "The Beatles - Hey Jude" },
-    { id: "IcrbM1l_BoI", title: "Avicii - Wake Me Up" },
-    { id: "pRpeEdMmmQ0", title: "Shakira - Waka Waka" },
-    { id: "YVkUvmDQ3HY", title: "Eminem - Lose Yourself" },
-    { id: "fJ9rUzIMcZQ", title: "Queen – We Will Rock You" },
-    { id: "450p7goxZqg", title: "John Legend - All of Me" },
-    { id: "hLQl3WQQoQ0", title: "Adele - Someone Like You" },
-    { id: "QK8mJJJvaes", title: "Miley Cyrus - Wrecking Ball" },
-    { id: "2vjPBrBU-TM", title: "Taylor Swift - Shake It Off" },
-    { id: "OPf0YbXqDm0", title: "Mark Ronson - Uptown Funk ft. Bruno Mars" },
-    { id: "C-dvTjK_07c", title: "Pharrell Williams - Happy" },
-    { id: "JGwWNGJdvx8", title: "Ed Sheeran - Shape of You" },
-    { id: "iD2rhdFRehU", title: "Coldplay - Yellow" },
-    { id: "WpYeekQkAdc", title: "The Black Eyed Peas - Where Is The Love?" },
-    { id: "Ri7-vnrJD3k", title: "Justin Timberlake - Can't Stop the Feeling" },
-    { id: "0J2QdDbelmY", title: "The Weeknd - Blinding Lights" },
+    {
+      id: "MiAoetOXKcY",
+      title: "Lana Del Rey - Say Yes To Heaven ",
+      duration: "3:29",
+    },
+    {
+      id: "Bag1gUxuU0g",
+      title: "Lana Del Rey - Born To Die",
+      duration: "4:46",
+    },
+    {
+      id: "o_1aF54DO60",
+      title: "Lana Del Rey - Young and Beautiful",
+      duration: "3:58",
+    },
+    {
+      id: "qolmz4FlnZ0",
+      title: "Lana Del Rey - Doin' Time",
+      duration: "4:25",
+    },
   ];
 
   let defaultQueue = shuffleArray(DEFAULT_VIDEOS);
@@ -73,7 +68,12 @@ io.on("connection", (socket) => {
     if (userQueue.some((v) => v.id === video.id)) return;
 
     userQueue.push(video);
-    io.emit("updateQueue", [...userQueue, ...defaultQueue]);
+
+    if (userQueue.length > 1) {
+      io.emit("updateQueue", [...userQueue]);
+    } else {
+      io.emit("updateQueue", [...userQueue, ...defaultQueue]);
+    }
   });
 
   // Обработчик события удаления видео из очереди
@@ -81,7 +81,11 @@ io.on("connection", (socket) => {
     userQueue = userQueue.filter((v) => v.id !== videoId);
     defaultQueue = defaultQueue.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
 
-    io.emit("updateQueue", [...userQueue, ...defaultQueue]);
+    if (userQueue.length > 1) {
+      io.emit("updateQueue", [...userQueue]);
+    } else {
+      io.emit("updateQueue", [...userQueue, ...defaultQueue]);
+    }
   });
 
   socket.on("disconnect", () => {
