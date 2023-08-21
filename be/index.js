@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
   // Обработчик события удаления видео из очереди
   socket.on("removeVideo", (videoId) => {
     userQueue = userQueue.filter((v) => v.id !== videoId);
-    defaultQueue = defaultQueue.filter((v) => v.id !== videoId); // Удалите нужное видео из дефолтной очереди
+    defaultQueue = defaultQueue.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
 
     io.emit("updateQueue", [...userQueue, ...defaultQueue]);
   });
