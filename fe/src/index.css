@@ -25,3 +25,20 @@ code {
   background-image: radial-gradient(circle at top, #66fff0, #fff 50%);
   min-height: 100vh;
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  display: inline-block;
+  animation: pulse 1s infinite;
+}

@@ -15,6 +15,7 @@ const Queue: FC<any> = ({
   volume,
   videoQueue,
   removeVideoFromQueue,
+  toggleFavorite,
 }) => {
   return (
     <div className="VideoPlayer__wrapper left-side">
@@ -44,6 +45,7 @@ const Queue: FC<any> = ({
       <PlayerList
         videoQueue={videoQueue}
         removeVideoFromQueue={removeVideoFromQueue}
+        toggleFavorite={toggleFavorite}
       />
     </div>
   );

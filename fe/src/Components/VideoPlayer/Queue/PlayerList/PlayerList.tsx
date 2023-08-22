@@ -1,8 +1,17 @@
 import React, { FC } from "react";
 import "./PlayerList.css";
 import { VideoItem } from "../../../../types/VideoItem";
+import {
+  DeleteIcon,
+  StarEmptyIcon,
+  VolumeAnimatedIcon,
+} from "../../../../assets/svg/svg";
 
-const PlayerList: FC<any> = ({ videoQueue, removeVideoFromQueue }) => {
+const PlayerList: FC<any> = ({
+  videoQueue,
+  removeVideoFromQueue,
+  toggleFavorite,
+}) => {
   return (
     <div
       style={{
@@ -12,16 +21,23 @@ const PlayerList: FC<any> = ({ videoQueue, removeVideoFromQueue }) => {
       <div className="queue">
         {videoQueue.map((video: VideoItem, index: any) => (
           <div className="video__container" key={video.id}>
-            <p>
+            {index === 0 && <VolumeAnimatedIcon />}
+            <p style={{ marginLeft: "10px" }}>
               {index + 1}: {video.title}
             </p>
             <p className="video__container_duration">{video.duration}</p>
-            <button
-              className="video__container_result-button"
+            <span
+              style={{ marginLeft: "5px", cursor: "pointer" }}
               onClick={() => removeVideoFromQueue(video.id)}
             >
-              -
-            </button>
+              <DeleteIcon />
+            </span>
+            <span
+              style={{ marginLeft: "5px", cursor: "pointer" }}
+              onClick={() => toggleFavorite(video)}
+            >
+              <StarEmptyIcon />
+            </span>
           </div>
         ))}
       </div>

@@ -1,5 +1,10 @@
-import React, { FC } from "react";
-import { PauseIcon, PlayIcon, VolumeIcon } from "../../../../assets/svg/svg";
+import React, { FC, useEffect, useRef } from "react";
+import {
+  PauseIcon,
+  PlayIcon,
+  VolumeIcon,
+  VolumeXIcon,
+} from "../../../../assets/svg/svg";
 import "./PlayerController.css";
 
 const PlayerController: FC<any> = ({
@@ -8,9 +13,39 @@ const PlayerController: FC<any> = ({
   handlePlayPause,
   isPlaying,
 }) => {
+  const prevVolume = useRef(volume);
+
+  useEffect(() => {
+    if (volume > 0) {
+      prevVolume.current = volume;
+    }
+  }, [volume]);
+
+  const muteVolume = () => {
+    const event = {
+      target: { value: "0" },
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleVolumeChange(event);
+  };
+
+  const restoreVolume = () => {
+    const event = {
+      target: { value: prevVolume.current.toString() },
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleVolumeChange(event);
+  };
   return (
     <div className="playerController">
-      <VolumeIcon />
+      {volume === 0 ? (
+        <span style={{ cursor: "pointer" }} onClick={restoreVolume}>
+          <VolumeXIcon />
+        </span>
+      ) : (
+        <span style={{ cursor: "pointer" }} onClick={muteVolume}>
+          <VolumeIcon />
+        </span>
+      )}
+
       <input
         type="range"
         id="volume"
@@ -21,7 +56,7 @@ const PlayerController: FC<any> = ({
         onChange={handleVolumeChange}
         className="range-input"
       />
-      <button onClick={handlePlayPause}>
+      <button style={{ cursor: "pointer" }} onClick={handlePlayPause}>
         {isPlaying ? <PauseIcon /> : <PlayIcon />}
       </button>
     </div>

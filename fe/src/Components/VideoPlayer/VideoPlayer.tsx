@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { YouTubeProps } from "react-youtube";
 import "./VideoPlayer.css";
 import socketIOClient from "socket.io-client";
 import Queue from "./Queue/Queue";
 import UserSetting from "./UserSetting/UserSetting";
 import { VideoItem } from "../../types/VideoItem";
+import toast, { Toaster } from "react-hot-toast";
+import { UserContext } from "../../store/UserContext/UserContext";
 
 const serverEndpoint: string | undefined =
   process.env.REACT_APP_SERVER_ENDPOINT;
@@ -17,6 +19,14 @@ const VideoPlayer = () => {
   const [volume, setVolume] = useState(50);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error("Header must be used within a UserProvider");
+  }
+
+  const { user } = userContext;
+
   useEffect(() => {
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
@@ -25,9 +35,7 @@ const VideoPlayer = () => {
     const socket = socketIOClient(serverEndpoint);
     socket.on("updateQueue", (queue) => {
       setVideoQueue(queue);
-      console.log("queue", queue);
       if (currentVideo === null && queue.length > 0) {
-        console.log("currentVideo", queue[0]);
         setCurrentVideo(queue[0]);
       }
     });
@@ -58,13 +66,22 @@ const VideoPlayer = () => {
   };
 
   const onVideoSelect = (video: VideoItem) => {
-    console.log(video);
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
       return;
     }
     const socket = socketIOClient(serverEndpoint);
+
     socket.emit("addVideo", video);
+
+    socket.on("videoExists", () => {
+      toast.error("This video is already in the queue!");
+      return;
+    });
+
+    socket.on("videoAdded", () => {
+      toast.success("Video was added!");
+    });
   };
 
   const playerRef = useRef<any>(null);
@@ -99,6 +116,7 @@ const VideoPlayer = () => {
     socket.emit("removeVideo", videoId);
 
     setVideoQueue(videoQueue.filter((video) => video.id !== videoId));
+    toast.success("Video was deleted!");
   };
 
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,13 +131,37 @@ const VideoPlayer = () => {
   const handlePlayPause = () => {
     if (playerRef.current) {
       if (isPlaying) {
-        console.log(playerRef.current);
         playerRef.current.internalPlayer.pauseVideo();
       } else {
         playerRef.current.internalPlayer.playVideo();
       }
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const toggleFavorite = (video: VideoItem) => {
+    if (!user) {
+      toast.error(`You are not authorized!`);
+      return;
+    }
+    fetch(`${process.env.REACT_APP_SERVER_ENDPOINT}/favorite/toggle`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ googleId: user, video }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message.includes("added")) {
+          toast.success("Video was added to favorite!");
+        } else {
+          toast.success("Video was deleted from favorite!");
+        }
+      })
+      .catch((error) => {
+        toast.error(`There was an error toggling the favorite video:${error}`);
+      });
   };
 
   return (
@@ -135,8 +177,13 @@ const VideoPlayer = () => {
         volume={volume}
         videoQueue={videoQueue}
         removeVideoFromQueue={removeVideoFromQueue}
+        toggleFavorite={toggleFavorite}
       />
-      <UserSetting onVideoSelect={onVideoSelect} />
+      <UserSetting
+        onVideoSelect={onVideoSelect}
+        toggleFavorite={toggleFavorite}
+      />
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
