@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import "./YouTubeSearch.css";
 import { formatDuration } from "../../../../helpers/formatDuration";
 import { VideoItem } from "../../../../types/VideoItem";
+import toast, { Toaster } from "react-hot-toast";
+import { AddIcon, StarEmptyIcon } from "../../../../assets/svg/svg";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
+  toggleFavorite: (video: VideoItem) => void;
 }
 
-const YouTubeSearch: React.FC<YouTubeSearchProps> = ({ onVideoSelect }) => {
+const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
+  onVideoSelect,
+  toggleFavorite,
+}) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
 
@@ -15,42 +21,55 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({ onVideoSelect }) => {
     setSearchTerm(event.target.value);
   };
 
-  const searchYouTube = async (e: any) => {
-    e.preventDefault();
+  const searchYouTube = useCallback(
+    async (e: any) => {
+      console.log("start searching");
+      e.preventDefault();
 
-    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${process.env.REACT_APP_API_KEY}&type=video&maxResults=10`;
-    const searchResponse = await fetch(searchUrl);
-    const searchData = await searchResponse.json();
-    console.log(searchData);
+      try {
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${process.env.REACT_APP_API_KEY}&type=video&maxResults=10`;
+        const searchResponse = await fetch(searchUrl);
+        const searchData = await searchResponse.json();
 
-    // Get videoIds
-    const videoIds = searchData.items.map((item: any) => item.id.videoId);
+        if (searchData.error) {
+          throw new Error(searchData.error.message);
+        }
 
-    // Fetch video details
-    const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds.join(
-      ","
-    )}&key=${process.env.REACT_APP_API_KEY}`;
-    const detailsResponse = await fetch(detailsUrl);
-    const detailsData = await detailsResponse.json();
+        const videoIds = searchData.items.map((item: any) => item.id.videoId);
 
-    // Map search results with additional details
-    const resultsWithDetails = searchData.items.map((item: any) => {
-      const details = detailsData.items.find(
-        (detail: any) => detail.id === item.id.videoId
-      );
-      console.log(details);
-      const duration = formatDuration(details?.contentDetails?.duration);
-      return {
-        id: item.id.videoId,
-        title: item.snippet.title,
-        duration,
-        views: details?.statistics?.viewCount,
-      };
-    });
+        const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds.join(
+          ","
+        )}&key=${process.env.REACT_APP_API_KEY}`;
+        const detailsResponse = await fetch(detailsUrl);
+        const detailsData = await detailsResponse.json();
 
-    setResults(resultsWithDetails);
-    console.log(resultsWithDetails);
-  };
+        if (detailsData.error) {
+          throw new Error(detailsData.error.message);
+        }
+
+        const resultsWithDetails = searchData.items.map((item: any) => {
+          const details = detailsData.items.find(
+            (detail: any) => detail.id === item.id.videoId
+          );
+          const duration = formatDuration(details?.contentDetails?.duration);
+          return {
+            id: item.id.videoId,
+            title: item.snippet.title,
+            duration,
+            views: details?.statistics?.viewCount,
+          };
+        });
+
+        setResults(resultsWithDetails);
+      } catch (error) {
+        console.error("An error occurred while fetching data:", error);
+        toast.error(
+          "The request cannot be completed because you have exceeded your quota"
+        );
+      }
+    },
+    [searchTerm]
+  );
 
   return (
     <div className="search-container">
@@ -64,10 +83,12 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({ onVideoSelect }) => {
         <button type="submit" className="search-button">
           Search
         </button>
-        <div className="results-container">
-          {results.map((result) => (
-            <div key={result.id} className="result-item">
-              <button
+      </form>
+      <div className="results-container">
+        {results.map((result) => (
+          <div key={result.id} className="result-item">
+            <div>
+              <span
                 className="result-button"
                 onClick={() =>
                   onVideoSelect({
@@ -77,18 +98,26 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({ onVideoSelect }) => {
                   })
                 }
               >
-                +
-              </button>
-              <p className="result-title">
-                {result.title.length > 50
-                  ? result.title.slice(0, 40) + "..."
-                  : result.title}
-              </p>
-              <p className="result-duration">{result.duration}</p>
+                <AddIcon />
+              </span>
+              <span
+                style={{ marginLeft: "5px", cursor: "pointer" }}
+                onClick={() => toggleFavorite(result)}
+              >
+                <StarEmptyIcon />
+              </span>
             </div>
-          ))}
-        </div>
-      </form>
+
+            <p className="result-title">
+              {result.title.length > 50
+                ? result.title.slice(0, 40) + "..."
+                : result.title}
+            </p>
+            <p className="result-duration">{result.duration}</p>
+          </div>
+        ))}
+      </div>
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
