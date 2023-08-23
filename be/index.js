@@ -7,14 +7,30 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "https://fondinferiorroot.stepanishin.repl.co",
+    "https://youtube-team-player.vercel.app",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
+
 const io = socketIo(server, {
   cors: {
-    origin: "*", // Разрешить подключение с любого домена
-    methods: ["GET", "POST"], // Разрешить методы, которые могут быть использованы в запросе
+    origin: [
+      "http://localhost:3000",
+      "https://fondinferiorroot.stepanishin.repl.co",
+      "https://youtube-team-player.vercel.app",
+    ],
+    methods: ["GET", "POST"],
   },
 });
 
@@ -103,7 +119,7 @@ io.on("connection", (socket) => {
 
 // Подключение к MongoDB
 mongoose.connect(
-  "mongodb+srv://evgeniistepanishin:Rtyuehe74@cluster0.haz86tn.mongodb.net/evgeniistepanishin?retryWrites=true&w=majority",
+  "mongodb+srv://evgeniistepanishin:Rtyuehe74@cluster0.haz86tn.mongodb.net/evgeniistepanishin?retryWrites=true&w=majority&ssl=true",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -196,5 +212,6 @@ app.get("/favoriteList", async (req, res) => {
   }
 });
 
-const port = 4001;
-server.listen(port, () => console.log(`Listening on port ${port}`));
+server.listen(3000, () => {
+  console.log("listening on *:3000");
+});
