@@ -111,7 +111,7 @@ mongoose.connect(
 );
 
 const userSchema = new mongoose.Schema({
-  googleId: String,
+  email: String,
   favoriteVideos: [
     {
       id: String,
@@ -124,13 +124,13 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 app.post("/auth/google", async (req, res) => {
-  const { googleId } = req.body;
+  const { email } = req.body;
 
   try {
-    let user = await User.findOne({ googleId });
+    let user = await User.findOne({ email });
 
     if (!user) {
-      user = new User({ googleId });
+      user = new User({ email });
       await user.save();
     }
 
@@ -143,10 +143,10 @@ app.post("/auth/google", async (req, res) => {
 });
 
 app.post("/favorite/toggle", async (req, res) => {
-  const { googleId, video } = req.body;
+  const { email, video } = req.body;
 
   try {
-    const user = await User.findOne({ googleId });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
@@ -169,6 +169,27 @@ app.post("/favorite/toggle", async (req, res) => {
         .status(200)
         .send({ message: "Video added to favorites", user });
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Something went wrong" });
+  }
+});
+
+app.get("/favoriteList", async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).send({ message: "Google ID is required" });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    return res.status(200).send({ favoriteVideos: user.favoriteVideos });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Something went wrong" });
