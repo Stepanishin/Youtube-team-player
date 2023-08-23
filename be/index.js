@@ -11,6 +11,8 @@ const app = express();
 const corsOptions = {
   origin: [
     "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3002",
     "https://fondinferiorroot.stepanishin.repl.co",
     "https://youtube-team-player.stepanishin.repl.co",
     "https://youtube-team-player.vercel.app",
@@ -28,6 +30,8 @@ const io = socketIo(server, {
   cors: {
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
       "https://fondinferiorroot.stepanishin.repl.co",
       "https://youtube-team-player.stepanishin.repl.co",
       "https://youtube-team-player.vercel.app",
@@ -56,33 +60,44 @@ io.on("connection", (socket) => {
       id: "TdrL3QxjyVw",
       title: "Lana Del Rey - Summertime Sadness",
       duration: "4:25",
+      added: "default",
     },
     {
       id: "MiAoetOXKcY",
       title: "Lana Del Rey - Say Yes To Heaven ",
       duration: "3:29",
+      added: "default",
     },
     {
       id: "Bag1gUxuU0g",
       title: "Lana Del Rey - Born To Die",
       duration: "4:46",
+      added: "default",
     },
     {
       id: "o_1aF54DO60",
       title: "Lana Del Rey - Young and Beautiful",
       duration: "3:58",
+      added: "default",
     },
     {
       id: "qolmz4FlnZ0",
       title: "Lana Del Rey - Doin' Time",
       duration: "4:25",
+      added: "default",
     },
   ];
 
   let defaultQueue = shuffleArray(DEFAULT_VIDEOS);
 
   // Отправка объединенной очереди клиенту
-  socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
+  // socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
+
+  if (userQueue.length > 1) {
+    socket.emit("updateQueue", [...userQueue]);
+  } else {
+    socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
+  }
 
   socket.on("addVideo", (video) => {
     // Проверка на существование видео в очереди
@@ -112,6 +127,11 @@ io.on("connection", (socket) => {
     } else {
       io.emit("updateQueue", [...userQueue, ...defaultQueue]);
     }
+  });
+
+  socket.on("togglePlayPause", (isPlaying) => {
+    // Рассылка состояния проигрывания всем подключенным пользователям
+    io.emit("setPlayPause", isPlaying);
   });
 
   socket.on("disconnect", () => {

@@ -38,6 +38,11 @@ const PlayerList: FC<any> = ({
             >
               <StarEmptyIcon />
             </span>
+            {video.added ? (
+              <p className="video__added">Added by {video.added}</p>
+            ) : (
+              <p className="video__added">Added by Anonymous</p>
+            )}
           </div>
         ))}
       </div>

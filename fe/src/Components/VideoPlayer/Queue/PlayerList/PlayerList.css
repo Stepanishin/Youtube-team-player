@@ -8,8 +8,17 @@
   padding: 10px;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .video__container_duration {
   margin-left: auto;
+}
+
+.video__added {
+  position: absolute;
+  font-size: 10px;
+  color: #ccc;
+  right: 10px;
+  bottom: -8px;
 }

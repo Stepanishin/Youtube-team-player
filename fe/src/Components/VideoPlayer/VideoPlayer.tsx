@@ -41,6 +41,15 @@ const VideoPlayer = () => {
       }
     });
 
+    socket.on("setPlayPause", (isPlayingFromServer) => {
+      setIsPlaying(isPlayingFromServer);
+      if (isPlayingFromServer) {
+        playerRef.current.internalPlayer.playVideo();
+      } else {
+        playerRef.current.internalPlayer.pauseVideo();
+      }
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -138,6 +147,12 @@ const VideoPlayer = () => {
         playerRef.current.internalPlayer.playVideo();
       }
       setIsPlaying(!isPlaying);
+
+      // Отправляем текущее состояние воспроизведения на сервер
+      if (serverEndpoint) {
+        const socket = socketIOClient(serverEndpoint);
+        socket.emit("togglePlayPause", !isPlaying);
+      }
     }
   };
 

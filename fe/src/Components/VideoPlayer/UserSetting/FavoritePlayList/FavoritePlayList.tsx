@@ -51,6 +51,7 @@ const FavoritePlayList: FC<any> = ({
           id: video.id,
           title: video.title,
           duration: video.duration,
+          ...(user ? { added: user } : {}),
         });
       });
     }
@@ -75,6 +76,7 @@ const FavoritePlayList: FC<any> = ({
                       id: video.id,
                       title: video.title,
                       duration: video.duration,
+                      ...(user ? { added: user } : {}),
                     })
                   }
                 >

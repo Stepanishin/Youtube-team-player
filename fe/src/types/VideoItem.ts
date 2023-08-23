@@ -3,4 +3,5 @@ export interface VideoItem {
   title: string;
   duration?: string;
   views?: string;
+  added?: string;
 }

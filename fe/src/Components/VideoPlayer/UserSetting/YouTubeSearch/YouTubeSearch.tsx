@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import "./YouTubeSearch.css";
 import { formatDuration } from "../../../../helpers/formatDuration";
 import { VideoItem } from "../../../../types/VideoItem";
 import toast, { Toaster } from "react-hot-toast";
 import { AddIcon, StarEmptyIcon } from "../../../../assets/svg/svg";
+import { UserContext } from "../../../../store/UserContext/UserContext";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -16,6 +17,14 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
+
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error("Header must be used within a UserProvider");
+  }
+
+  const { user } = userContext;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -95,6 +104,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
                     id: result.id,
                     title: result.title,
                     duration: result.duration,
+                    ...(user ? { added: user } : {}),
                   })
                 }
               >
