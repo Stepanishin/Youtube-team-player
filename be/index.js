@@ -172,7 +172,6 @@ app.post("/auth/google", async (req, res) => {
       await user.save();
     }
 
-    // Здесь можно сгенерировать и отправить JWT или другой токен для аутентификации в вашем приложении, если это необходимо
     res.status(200).send({ message: "Authentication successful", user });
   } catch (error) {
     console.error(error);
