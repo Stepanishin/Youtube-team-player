@@ -12,6 +12,7 @@ const corsOptions = {
   origin: [
     "http://localhost:3000",
     "https://fondinferiorroot.stepanishin.repl.co",
+    "https://youtube-team-player.stepanishin.repl.co",
     "https://youtube-team-player.vercel.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -28,6 +29,7 @@ const io = socketIo(server, {
     origin: [
       "http://localhost:3000",
       "https://fondinferiorroot.stepanishin.repl.co",
+      "https://youtube-team-player.stepanishin.repl.co",
       "https://youtube-team-player.vercel.app",
     ],
     methods: ["GET", "POST"],
