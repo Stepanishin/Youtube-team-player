@@ -16,8 +16,9 @@ const VideoPlayer = () => {
   const [videoQueue, setVideoQueue] = useState<VideoItem[]>([]);
   const [currentVideo, setCurrentVideo] = useState<VideoItem | null>(null);
   const [endTriggered, setEndTriggered] = useState(false);
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isFavoriteToggled, setIsFavoriteToggled] = useState(false);
 
   const userContext = useContext(UserContext);
 
@@ -122,6 +123,7 @@ const VideoPlayer = () => {
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
     setVolume(newVolume);
+    console.log("newVolume", newVolume);
 
     if (playerRef.current && playerRef.current.internalPlayer) {
       playerRef.current.internalPlayer.setVolume(newVolume);
@@ -149,14 +151,16 @@ const VideoPlayer = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ googleId: user, video }),
+      body: JSON.stringify({ email: user, video }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.message.includes("added")) {
           toast.success("Video was added to favorite!");
+          setIsFavoriteToggled((prevState) => !prevState);
         } else {
           toast.success("Video was deleted from favorite!");
+          setIsFavoriteToggled((prevState) => !prevState);
         }
       })
       .catch((error) => {
@@ -182,6 +186,7 @@ const VideoPlayer = () => {
       <UserSetting
         onVideoSelect={onVideoSelect}
         toggleFavorite={toggleFavorite}
+        isFavoriteToggled={isFavoriteToggled}
       />
       <Toaster position="top-right" reverseOrder={false} />
     </div>

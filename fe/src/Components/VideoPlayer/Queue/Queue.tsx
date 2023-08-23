@@ -17,6 +17,10 @@ const Queue: FC<any> = ({
   removeVideoFromQueue,
   toggleFavorite,
 }) => {
+  const onReady = (event: any) => {
+    event.target.setVolume(volume);
+  };
+
   return (
     <div className="VideoPlayer__wrapper left-side">
       <div className="VideoPlayer__left-side_wrapper">
@@ -26,6 +30,7 @@ const Queue: FC<any> = ({
             opts={opts}
             onEnd={onEnd}
             ref={playerRef}
+            onReady={onReady}
           />
         )}
         <div style={{ display: "flex", flexDirection: "column" }}>
