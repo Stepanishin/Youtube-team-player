@@ -3,7 +3,11 @@ import YouTubeSearch from "./YouTubeSearch/YouTubeSearch";
 import FavoritePlayList from "./FavoritePlayList/FavoritePlayList";
 import "./UserSetting.css";
 
-const UserSetting: FC<any> = ({ onVideoSelect, toggleFavorite }) => {
+const UserSetting: FC<any> = ({
+  onVideoSelect,
+  toggleFavorite,
+  isFavoriteToggled,
+}) => {
   const [activeTab, setActiveTab] = useState("YouTubeSearch");
   return (
     <div className="VideoPlayer__wrapper right-side">
@@ -28,7 +32,13 @@ const UserSetting: FC<any> = ({ onVideoSelect, toggleFavorite }) => {
             toggleFavorite={toggleFavorite}
           />
         )}
-        {activeTab === "FavoritePlayList" && <FavoritePlayList />}
+        {activeTab === "FavoritePlayList" && (
+          <FavoritePlayList
+            onVideoSelect={onVideoSelect}
+            toggleFavorite={toggleFavorite}
+            isFavoriteToggled={isFavoriteToggled}
+          />
+        )}
       </div>
     </div>
   );
