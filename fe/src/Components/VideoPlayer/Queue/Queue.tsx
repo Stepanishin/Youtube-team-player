@@ -3,6 +3,7 @@ import YouTube from "react-youtube";
 import "./Queue.css";
 import PlayerController from "./PlayerController/PlayerController";
 import PlayerList from "./PlayerList/PlayerList";
+import { UsersIcon } from "../../../assets/svg/svg";
 
 const Queue: FC<any> = ({
   currentVideo,
@@ -16,6 +17,7 @@ const Queue: FC<any> = ({
   videoQueue,
   removeVideoFromQueue,
   toggleFavorite,
+  userCount,
 }) => {
   const onReady = (event: any) => {
     event.target.setVolume(volume);
@@ -24,6 +26,9 @@ const Queue: FC<any> = ({
   return (
     <div className="VideoPlayer__wrapper left-side">
       <div className="VideoPlayer__left-side_wrapper">
+        <p className="userCount_wrapper">
+          <UsersIcon /> <span>{userCount}</span>
+        </p>
         {currentVideo && (
           <YouTube
             videoId={currentVideo.id}
@@ -33,7 +38,13 @@ const Queue: FC<any> = ({
             onReady={onReady}
           />
         )}
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "relative",
+          }}
+        >
           <p>
             Current video:{" "}
             <span className="current_title">{currentVideo?.title}</span>

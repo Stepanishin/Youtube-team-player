@@ -42,6 +42,8 @@ const io = socketIo(server, {
 
 // Пользовательская очередь
 let userQueue = [];
+// Количество подключенных пользователей
+let connectedUsers = 0;
 
 // return shuffled array
 function shuffleArray(array) {
@@ -54,6 +56,8 @@ function shuffleArray(array) {
 }
 
 io.on("connection", (socket) => {
+  connectedUsers += 1;
+  io.emit("updateUserCount", connectedUsers);
   console.log("New client connected");
   const DEFAULT_VIDEOS = [
     {
@@ -135,6 +139,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    connectedUsers -= 1;
+    io.emit("updateUserCount", connectedUsers);
     console.log("Client disconnected");
   });
 });

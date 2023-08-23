@@ -19,6 +19,7 @@ const VideoPlayer = () => {
   const [volume, setVolume] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFavoriteToggled, setIsFavoriteToggled] = useState(false);
+  const [userCount, setUserCount] = useState(0);
 
   const userContext = useContext(UserContext);
 
@@ -48,6 +49,10 @@ const VideoPlayer = () => {
       } else {
         playerRef.current.internalPlayer.pauseVideo();
       }
+    });
+
+    socket.on("updateUserCount", (count) => {
+      setUserCount(count);
     });
 
     return () => {
@@ -197,6 +202,7 @@ const VideoPlayer = () => {
         videoQueue={videoQueue}
         removeVideoFromQueue={removeVideoFromQueue}
         toggleFavorite={toggleFavorite}
+        userCount={userCount}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}

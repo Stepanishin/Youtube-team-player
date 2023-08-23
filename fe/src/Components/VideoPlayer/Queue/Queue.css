@@ -1,6 +1,7 @@
 .VideoPlayer__wrapper {
   background-color: rgb(255 255 255);
   border: 1px solid rgb(209 213 219);
+  position: relative;
 }
 
 .left-side {
@@ -15,4 +16,15 @@
 
 .current_title {
   font-weight: bold;
+}
+
+.userCount_wrapper {
+  position: absolute;
+  right: 10px;
+  top: -5px;
+}
+
+.userCount_wrapper span {
+  position: relative;
+  top: -2px;
 }
