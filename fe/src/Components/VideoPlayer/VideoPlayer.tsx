@@ -63,6 +63,10 @@ const VideoPlayer = () => {
       toast.success("Video was added!");
     });
 
+    socketRef.current.on("getUsersCount", (count) => {
+      setUserCount(count);
+    });
+
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -71,7 +75,6 @@ const VideoPlayer = () => {
   }, []);
 
   const onEnd = () => {
-    console.log("onEnd");
     if (endTriggered) return;
     setEndTriggered(true);
 
