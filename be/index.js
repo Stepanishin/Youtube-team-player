@@ -56,9 +56,7 @@ function shuffleArray(array) {
 }
 
 io.on("connection", (socket) => {
-  connectedUsers += 1;
-  io.emit("updateUserCount", connectedUsers);
-  console.log("New client connected");
+  console.log("New client connected", socket.id);
   const DEFAULT_VIDEOS = [
     {
       id: "TdrL3QxjyVw",
@@ -98,12 +96,20 @@ io.on("connection", (socket) => {
   // socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
 
   if (userQueue.length > 1) {
+    console.log("userQueue1", userQueue);
     socket.emit("updateQueue", [...userQueue]);
   } else {
+    console.log("userQueue2", userQueue);
     socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
   }
+  // socket.on("getVideoList", (isPlaying) => {
+  //   // Рассылка состояния проигрывания всем подключенным пользователям
+  //   io.emit("setPlayPause", isPlaying);
+  // });
 
   socket.on("addVideo", (video) => {
+    console.log("check1");
+    console.log("addVideo", video);
     // Проверка на существование видео в очереди
     if (userQueue.some((v) => v.id === video.id)) {
       socket.emit("videoExists", "This video is already in the queue!"); // Отправить сообщение об ошибке клиенту
@@ -111,6 +117,7 @@ io.on("connection", (socket) => {
     }
 
     userQueue.push(video);
+    console.log("userQueue", userQueue);
 
     if (userQueue.length > 1) {
       io.emit("updateQueue", [...userQueue]);
@@ -123,6 +130,7 @@ io.on("connection", (socket) => {
 
   // Обработчик события удаления видео из очереди
   socket.on("removeVideo", (videoId) => {
+    console.log("check2");
     userQueue = userQueue.filter((v) => v.id !== videoId);
     defaultQueue = defaultQueue.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
 
@@ -134,14 +142,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("togglePlayPause", (isPlaying) => {
+    console.log("check3");
     // Рассылка состояния проигрывания всем подключенным пользователям
     io.emit("setPlayPause", isPlaying);
   });
 
   socket.on("disconnect", () => {
-    connectedUsers -= 1;
-    io.emit("updateUserCount", connectedUsers);
-    console.log("Client disconnected");
+    console.log("Client disconnected", socket.id);
   });
 });
 

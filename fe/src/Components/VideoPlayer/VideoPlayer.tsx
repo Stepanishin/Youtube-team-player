@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { YouTubeProps } from "react-youtube";
 import "./VideoPlayer.css";
-import socketIOClient from "socket.io-client";
+import socketIOClient, { Socket } from "socket.io-client";
 import Queue from "./Queue/Queue";
 import UserSetting from "./UserSetting/UserSetting";
 import { VideoItem } from "../../types/VideoItem";
@@ -29,20 +29,24 @@ const VideoPlayer = () => {
 
   const { user } = userContext;
 
+  const socketRef = useRef<Socket | null>(null);
+
   useEffect(() => {
+    console.log("render");
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
       return;
     }
-    const socket = socketIOClient(serverEndpoint);
-    socket.on("updateQueue", (queue) => {
+    socketRef.current = socketIOClient(serverEndpoint);
+    socketRef.current.on("updateQueue", (queue) => {
+      console.log("updateQueue", queue);
       setVideoQueue(queue);
       if (currentVideo === null && queue.length > 0) {
         setCurrentVideo(queue[0]);
       }
     });
 
-    socket.on("setPlayPause", (isPlayingFromServer) => {
+    socketRef.current.on("setPlayPause", (isPlayingFromServer) => {
       setIsPlaying(isPlayingFromServer);
       if (isPlayingFromServer) {
         playerRef.current.internalPlayer.playVideo();
@@ -51,24 +55,32 @@ const VideoPlayer = () => {
       }
     });
 
-    socket.on("updateUserCount", (count) => {
-      setUserCount(count);
+    socketRef.current.on("videoExists", () => {
+      toast.error("This video is already in the queue!");
+    });
+
+    socketRef.current.on("videoAdded", () => {
+      toast.success("Video was added!");
     });
 
     return () => {
-      socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
     };
   }, []);
 
   const onEnd = () => {
+    console.log("onEnd");
     if (endTriggered) return;
     setEndTriggered(true);
 
     const videoIdToRemove = currentVideo ? currentVideo.id : null;
 
     if (videoIdToRemove && serverEndpoint) {
-      const socket = socketIOClient(serverEndpoint);
-      socket.emit("removeVideo", videoIdToRemove);
+      if (socketRef.current) {
+        socketRef.current.emit("removeVideo", videoIdToRemove);
+      }
     }
   };
 
@@ -81,27 +93,21 @@ const VideoPlayer = () => {
   };
 
   const onVideoSelect = (video: VideoItem) => {
+    console.log("onVideoSelect", video);
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
       return;
     }
-    const socket = socketIOClient(serverEndpoint);
 
-    socket.emit("addVideo", video);
-
-    socket.on("videoExists", () => {
-      toast.error("This video is already in the queue!");
-      return;
-    });
-
-    socket.on("videoAdded", () => {
-      toast.success("Video was added!");
-    });
+    if (socketRef.current) {
+      socketRef.current.emit("addVideo", video);
+    }
   };
 
   const playerRef = useRef<any>(null);
 
   useEffect(() => {
+    let videoStarted = false;
     if (playerRef.current && playerRef.current.internalPlayer) {
       playerRef.current.internalPlayer
         .getPlayerState()
@@ -109,7 +115,10 @@ const VideoPlayer = () => {
           if (result === 3) {
             playerRef.current.internalPlayer.playVideo();
           }
-          if (result === -1 || result === 0) {
+          if (result === 1) {
+            videoStarted = true; // Видео начало воспроизводиться
+          }
+          if ((result === -1 || result === 0) && videoStarted) {
             onEnd();
           }
         })
@@ -127,8 +136,9 @@ const VideoPlayer = () => {
       console.error("SERVER_ENDPOINT is not defined");
       return;
     }
-    const socket = socketIOClient(serverEndpoint);
-    socket.emit("removeVideo", videoId);
+    if (socketRef.current) {
+      socketRef.current.emit("removeVideo", videoId);
+    }
 
     setVideoQueue(videoQueue.filter((video) => video.id !== videoId));
     toast.success("Video was deleted!");
@@ -155,8 +165,9 @@ const VideoPlayer = () => {
 
       // Отправляем текущее состояние воспроизведения на сервер
       if (serverEndpoint) {
-        const socket = socketIOClient(serverEndpoint);
-        socket.emit("togglePlayPause", !isPlaying);
+        if (socketRef.current) {
+          socketRef.current.emit("togglePlayPause", !isPlaying);
+        }
       }
     }
   };
