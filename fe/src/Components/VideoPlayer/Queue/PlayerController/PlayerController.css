@@ -1,7 +1,7 @@
 .playerController {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 12px;
   border: 1px solid rgb(209 213 219);
   width: fit-content;
   padding: 5px;

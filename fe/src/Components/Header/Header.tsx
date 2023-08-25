@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import "./Header.css";
 import axios from "axios";
-import { UserContext } from "../../store/UserContext/UserContext";
+import { UserContext } from "../../context/UserContext/UserContext";
 import { useGoogleLogin } from "@react-oauth/google";
 import { googleLogout } from "@react-oauth/google";
 import { GoogleIcon } from "../../assets/svg/svg";
+import DarkModeToggle from "../UI/DarkModeToggle/DarkModeToggle";
 
 const Header = () => {
   const userContext = useContext(UserContext);
@@ -16,7 +17,6 @@ const Header = () => {
   const { user, setUser, picture, setPicture } = userContext;
 
   const beLogin = async (email?: any, picture?: any) => {
-    console.log("credentialResponse", email);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_ENDPOINT}/auth/google`,
@@ -24,7 +24,6 @@ const Header = () => {
           email: email,
         }
       );
-      console.log("response", response);
       setUser(email);
       setPicture(picture);
     } catch (error) {
@@ -34,13 +33,11 @@ const Header = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log(tokenResponse);
       const userInfo = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
       );
 
-      console.log(userInfo);
       beLogin(userInfo.data.email, userInfo.data.picture);
     },
     onError: (errorResponse) => console.log(errorResponse),
@@ -50,7 +47,8 @@ const Header = () => {
     <header>
       <div>AgileRadio</div>
 
-      <div>
+      <div className="Header__right-side">
+        <DarkModeToggle />
         {user ? (
           <button className="google-button" onClick={() => googleLogin()}>
             <img className="google-avatar" src={picture} alt="avatar" />

@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import "./FavoritePlayList.css";
 import { VideoItem } from "../../../../types/VideoItem";
-import { UserContext } from "../../../../store/UserContext/UserContext";
+import { UserContext } from "../../../../context/UserContext/UserContext";
 import axios from "axios";
 import { AddIcon, StarEmptyIcon } from "../../../../assets/svg/svg";
 
@@ -32,9 +32,7 @@ const FavoritePlayList: FC<any> = ({
               },
             }
           );
-          console.log("response", response);
           if (response) {
-            console.log("change");
             setFavoriteList(response.data.favoriteVideos);
           }
         }
