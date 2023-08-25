@@ -2,6 +2,7 @@ import React, { FC, useEffect, useRef } from "react";
 import {
   PauseIcon,
   PlayIcon,
+  ShuffleIcon,
   VolumeIcon,
   VolumeXIcon,
 } from "../../../../assets/svg/svg";
@@ -12,6 +13,7 @@ const PlayerController: FC<any> = ({
   handleVolumeChange,
   handlePlayPause,
   isPlaying,
+  shuffleVideoListHandler,
 }) => {
   const prevVolume = useRef(volume);
 
@@ -58,6 +60,9 @@ const PlayerController: FC<any> = ({
       />
       <span style={{ cursor: "pointer" }} onClick={handlePlayPause}>
         {isPlaying ? <PauseIcon /> : <PlayIcon />}
+      </span>
+      <span style={{ cursor: "pointer" }} onClick={shuffleVideoListHandler}>
+        <ShuffleIcon />
       </span>
     </div>
   );

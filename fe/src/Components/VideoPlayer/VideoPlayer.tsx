@@ -198,6 +198,16 @@ const VideoPlayer = () => {
       });
   };
 
+  const shuffleVideoListHandler = () => {
+    if (!serverEndpoint) {
+      console.error("SERVER_ENDPOINT is not defined");
+      return;
+    }
+    if (socketRef.current) {
+      socketRef.current.emit("shuffleVideoList");
+    }
+  };
+
   return (
     <div className="video-container">
       <Queue
@@ -213,6 +223,7 @@ const VideoPlayer = () => {
         removeVideoFromQueue={removeVideoFromQueue}
         toggleFavorite={toggleFavorite}
         userCount={userCount}
+        shuffleVideoListHandler={shuffleVideoListHandler}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}
