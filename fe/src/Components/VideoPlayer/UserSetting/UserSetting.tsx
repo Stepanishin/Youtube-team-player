@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import YouTubeSearch from "./YouTubeSearch/YouTubeSearch";
 import FavoritePlayList from "./FavoritePlayList/FavoritePlayList";
 import "./UserSetting.css";
+import ReadMe from "./ReadMe/ReadMe";
 
 const UserSetting: FC<any> = ({
   onVideoSelect,
@@ -28,6 +29,12 @@ const UserSetting: FC<any> = ({
         >
           Favorite PlayList
         </button>
+        <button
+          className={activeTab === "ReadMe" ? "tabs-btn active" : "tabs-btn"}
+          onClick={() => setActiveTab("ReadMe")}
+        >
+          Read.me
+        </button>
       </div>
       <div className="tab-content">
         {activeTab === "YouTubeSearch" && (
@@ -43,6 +50,7 @@ const UserSetting: FC<any> = ({
             isFavoriteToggled={isFavoriteToggled}
           />
         )}
+        {activeTab === "ReadMe" && <ReadMe />}
       </div>
     </div>
   );
