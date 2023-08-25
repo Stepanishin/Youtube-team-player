@@ -22,9 +22,12 @@ const PlayerList: FC<any> = ({
         {videoQueue.map((video: VideoItem, index: any) => (
           <div className="video__container" key={video.id}>
             {index === 0 && <VolumeAnimatedIcon />}
-            <p style={{ marginLeft: "10px" }}>
-              {index + 1}: {video.title}
-            </p>
+            {video.title && (
+              <p style={{ marginLeft: "10px" }}>
+                {index + 1}: {video.title}
+              </p>
+            )}
+
             <p className="video__container_duration">{video.duration}</p>
             <span
               style={{ marginLeft: "5px", cursor: "pointer" }}

@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-// app.use(cors());
 const corsOptions = {
   origin: [
     "http://localhost:3000",
@@ -150,8 +149,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("shuffleVideoList", () => {
-    userQueue = shuffleExceptFirst(userQueue);
-    io.emit("updateQueue", userQueue);
+    if (userQueue.length > 1) {
+      userQueue = shuffleExceptFirst(userQueue);
+      io.emit("updateQueue", [...userQueue]);
+    } else {
+      io.emit("updateQueue", [...defaultQueue]);
+    }
+    // io.emit("updateQueue", userQueue);
   });
 
   socket.on("disconnect", () => {

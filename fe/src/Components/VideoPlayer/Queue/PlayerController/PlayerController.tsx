@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import {
   PauseIcon,
   PlayIcon,
@@ -7,6 +7,7 @@ import {
   VolumeXIcon,
 } from "../../../../assets/svg/svg";
 import "./PlayerController.css";
+import Tooltip from "../../../UI/Tooltip/Tooltip";
 
 const PlayerController: FC<any> = ({
   volume,
@@ -15,6 +16,7 @@ const PlayerController: FC<any> = ({
   isPlaying,
   shuffleVideoListHandler,
 }) => {
+  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
   const prevVolume = useRef(volume);
 
   useEffect(() => {
@@ -41,10 +43,12 @@ const PlayerController: FC<any> = ({
       {volume === 0 ? (
         <span style={{ cursor: "pointer" }} onClick={restoreVolume}>
           <VolumeXIcon />
+          {/* {showTooltip && <Tooltip>UnMute</Tooltip>} */}
         </span>
       ) : (
         <span style={{ cursor: "pointer" }} onClick={muteVolume}>
           <VolumeIcon />
+          {/* {showTooltip && <Tooltip>Mute</Tooltip>} */}
         </span>
       )}
 
@@ -58,11 +62,24 @@ const PlayerController: FC<any> = ({
         onChange={handleVolumeChange}
         className="range-input"
       />
-      <span style={{ cursor: "pointer" }} onClick={handlePlayPause}>
+      <span
+        style={{ cursor: "pointer" }}
+        onClick={handlePlayPause}
+        onMouseEnter={() => setHoveredIcon("playpause")}
+        onMouseLeave={() => setHoveredIcon(null)}
+      >
         {isPlaying ? <PauseIcon /> : <PlayIcon />}
+        {hoveredIcon === "playpause" && <Tooltip>Play/Pause</Tooltip>}
       </span>
-      <span style={{ cursor: "pointer" }} onClick={shuffleVideoListHandler}>
+
+      <span
+        style={{ cursor: "pointer" }}
+        onClick={shuffleVideoListHandler}
+        onMouseEnter={() => setHoveredIcon("shuffle")}
+        onMouseLeave={() => setHoveredIcon(null)}
+      >
         <ShuffleIcon />
+        {hoveredIcon === "shuffle" && <Tooltip>Shuffle</Tooltip>}
       </span>
     </div>
   );

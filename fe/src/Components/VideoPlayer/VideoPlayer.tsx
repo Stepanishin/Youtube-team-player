@@ -206,6 +206,7 @@ const VideoPlayer = () => {
     if (socketRef.current) {
       socketRef.current.emit("shuffleVideoList");
     }
+    console.log(videoQueue);
   };
 
   return (
