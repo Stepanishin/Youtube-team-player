@@ -7,7 +7,7 @@ import Queue from "./Queue/Queue";
 import UserSetting from "./UserSetting/UserSetting";
 import { VideoItem } from "../../types/VideoItem";
 import toast, { Toaster } from "react-hot-toast";
-import { UserContext } from "../../store/UserContext/UserContext";
+import { UserContext } from "../../context/UserContext/UserContext";
 
 const serverEndpoint: string | undefined =
   process.env.REACT_APP_SERVER_ENDPOINT;
@@ -32,14 +32,12 @@ const VideoPlayer = () => {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    console.log("render");
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
       return;
     }
     socketRef.current = socketIOClient(serverEndpoint);
     socketRef.current.on("updateQueue", (queue) => {
-      console.log("updateQueue", queue);
       setVideoQueue(queue);
       if (currentVideo === null && queue.length > 0) {
         setCurrentVideo(queue[0]);
@@ -96,7 +94,6 @@ const VideoPlayer = () => {
   };
 
   const onVideoSelect = (video: VideoItem) => {
-    console.log("onVideoSelect", video);
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
       return;
@@ -150,7 +147,6 @@ const VideoPlayer = () => {
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
     setVolume(newVolume);
-    console.log("newVolume", newVolume);
 
     if (playerRef.current && playerRef.current.internalPlayer) {
       playerRef.current.internalPlayer.setVolume(newVolume);

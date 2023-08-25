@@ -56,9 +56,9 @@ const PlayerController: FC<any> = ({
         onChange={handleVolumeChange}
         className="range-input"
       />
-      <button style={{ cursor: "pointer" }} onClick={handlePlayPause}>
+      <span style={{ cursor: "pointer" }} onClick={handlePlayPause}>
         {isPlaying ? <PauseIcon /> : <PlayIcon />}
-      </button>
+      </span>
     </div>
   );
 };

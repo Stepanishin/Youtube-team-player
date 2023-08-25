@@ -10,6 +10,13 @@ header {
   width: 100%;
 }
 
+.Header__right-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
 .google-button {
   background: none;
   border: 2px solid rgb(13 148 136);

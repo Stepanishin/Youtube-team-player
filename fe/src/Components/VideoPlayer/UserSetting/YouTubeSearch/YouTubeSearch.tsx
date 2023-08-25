@@ -4,7 +4,7 @@ import { formatDuration } from "../../../../helpers/formatDuration";
 import { VideoItem } from "../../../../types/VideoItem";
 import toast, { Toaster } from "react-hot-toast";
 import { AddIcon, StarEmptyIcon } from "../../../../assets/svg/svg";
-import { UserContext } from "../../../../store/UserContext/UserContext";
+import { UserContext } from "../../../../context/UserContext/UserContext";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -32,7 +32,6 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
 
   const searchYouTube = useCallback(
     async (e: any) => {
-      console.log("start searching");
       e.preventDefault();
 
       try {

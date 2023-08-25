@@ -13,13 +13,17 @@ const UserSetting: FC<any> = ({
     <div className="VideoPlayer__wrapper right-side">
       <div className="tabs">
         <button
-          className={activeTab === "YouTubeSearch" ? "active" : ""}
+          className={
+            activeTab === "YouTubeSearch" ? "tabs-btn active" : "tabs-btn"
+          }
           onClick={() => setActiveTab("YouTubeSearch")}
         >
           YouTube Search
         </button>
         <button
-          className={activeTab === "FavoritePlayList" ? "active" : ""}
+          className={
+            activeTab === "FavoritePlayList" ? "tabs-btn active" : "tabs-btn"
+          }
           onClick={() => setActiveTab("FavoritePlayList")}
         >
           Favorite PlayList
