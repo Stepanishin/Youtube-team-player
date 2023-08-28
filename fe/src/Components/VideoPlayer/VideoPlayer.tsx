@@ -275,6 +275,20 @@ const VideoPlayer = () => {
     }
   };
 
+  const playNextVideo = () => {
+    const currentIndex = videoList!.findIndex(
+      (video) => video.id === currentVideo?.id
+    );
+
+    if (currentIndex !== -1 && currentIndex < videoList!.length - 1) {
+      // Если текущее видео не последнее в очереди, переключаемся на следующее
+      setCurrentVideo(videoList![currentIndex + 1]);
+    } else if (currentIndex === videoList!.length - 1) {
+      // Если текущее видео последнее в очереди, делаем что-то еще (например, переключаемся на первое видео или ставим текущее видео в null)
+      setCurrentVideo(videoList![0]);
+    }
+  };
+
   return (
     <div className="video-container">
       <Queue
@@ -292,6 +306,7 @@ const VideoPlayer = () => {
         userCount={userCount}
         shuffleVideoListHandler={shuffleVideoListHandler}
         switchToVideo={switchToVideo}
+        playNextVideo={playNextVideo}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}

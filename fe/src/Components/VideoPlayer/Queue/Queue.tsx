@@ -20,6 +20,7 @@ const Queue: FC<any> = ({
   userCount,
   shuffleVideoListHandler,
   switchToVideo,
+  playNextVideo,
 }) => {
   const onReady = (event: any) => {
     event.target.setVolume(volume);
@@ -51,6 +52,7 @@ const Queue: FC<any> = ({
             handlePlayPause={handlePlayPause}
             isPlaying={isPlaying}
             shuffleVideoListHandler={shuffleVideoListHandler}
+            playNextVideo={playNextVideo}
           />
         </div>
       </div>
