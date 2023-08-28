@@ -19,6 +19,7 @@ const Queue: FC<any> = ({
   toggleFavorite,
   userCount,
   shuffleVideoListHandler,
+  switchToVideo,
 }) => {
   const onReady = (event: any) => {
     event.target.setVolume(volume);
@@ -58,6 +59,8 @@ const Queue: FC<any> = ({
         videoQueue={videoQueue}
         removeVideoFromQueue={removeVideoFromQueue}
         toggleFavorite={toggleFavorite}
+        currentVideo={currentVideo}
+        switchToVideo={switchToVideo}
       />
     </div>
   );

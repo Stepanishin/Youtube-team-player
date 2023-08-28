@@ -70,36 +70,36 @@ function shuffleExceptFirst(array) {
 io.on("connection", (socket) => {
   console.log("New client connected", socket.id);
   const DEFAULT_VIDEOS = [
-    {
-      id: "TdrL3QxjyVw",
-      title: "Lana Del Rey - Summertime Sadness",
-      duration: "4:25",
-      added: "default",
-    },
-    {
-      id: "MiAoetOXKcY",
-      title: "Lana Del Rey - Say Yes To Heaven ",
-      duration: "3:29",
-      added: "default",
-    },
-    {
-      id: "Bag1gUxuU0g",
-      title: "Lana Del Rey - Born To Die",
-      duration: "4:46",
-      added: "default",
-    },
-    {
-      id: "o_1aF54DO60",
-      title: "Lana Del Rey - Young and Beautiful",
-      duration: "3:58",
-      added: "default",
-    },
-    {
-      id: "qolmz4FlnZ0",
-      title: "Lana Del Rey - Doin' Time",
-      duration: "4:25",
-      added: "default",
-    },
+    // {
+    //   id: "TdrL3QxjyVw",
+    //   title: "Lana Del Rey - Summertime Sadness",
+    //   duration: "4:25",
+    //   added: "default",
+    // },
+    // {
+    //   id: "MiAoetOXKcY",
+    //   title: "Lana Del Rey - Say Yes To Heaven ",
+    //   duration: "3:29",
+    //   added: "default",
+    // },
+    // {
+    //   id: "Bag1gUxuU0g",
+    //   title: "Lana Del Rey - Born To Die",
+    //   duration: "4:46",
+    //   added: "default",
+    // },
+    // {
+    //   id: "o_1aF54DO60",
+    //   title: "Lana Del Rey - Young and Beautiful",
+    //   duration: "3:58",
+    //   added: "default",
+    // },
+    // {
+    //   id: "qolmz4FlnZ0",
+    //   title: "Lana Del Rey - Doin' Time",
+    //   duration: "4:25",
+    //   added: "default",
+    // },
   ];
 
   let defaultQueue = shuffleArray(DEFAULT_VIDEOS);
@@ -145,17 +145,16 @@ io.on("connection", (socket) => {
 
   socket.on("togglePlayPause", (isPlaying) => {
     // Рассылка состояния проигрывания всем подключенным пользователям
-    io.emit("setPlayPause", isPlaying);
+    // io.emit("setPlayPause", isPlaying);
   });
 
   socket.on("shuffleVideoList", () => {
-    if (userQueue.length > 1) {
-      userQueue = shuffleExceptFirst(userQueue);
-      io.emit("updateQueue", [...userQueue]);
-    } else {
-      io.emit("updateQueue", [...defaultQueue]);
-    }
-    // io.emit("updateQueue", userQueue);
+    // if (userQueue.length > 1) {
+    //   userQueue = shuffleExceptFirst(userQueue);
+    //   io.emit("updateQueue", [...userQueue]);
+    // } else {
+    //   io.emit("updateQueue", [...defaultQueue]);
+    // }
   });
 
   socket.on("disconnect", () => {

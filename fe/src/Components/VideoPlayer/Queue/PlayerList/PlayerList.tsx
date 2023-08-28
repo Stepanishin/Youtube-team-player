@@ -3,6 +3,7 @@ import "./PlayerList.css";
 import { VideoItem } from "../../../../types/VideoItem";
 import {
   DeleteIcon,
+  PlayIcon,
   StarEmptyIcon,
   VolumeAnimatedIcon,
 } from "../../../../assets/svg/svg";
@@ -11,6 +12,8 @@ const PlayerList: FC<any> = ({
   videoQueue,
   removeVideoFromQueue,
   toggleFavorite,
+  currentVideo,
+  switchToVideo,
 }) => {
   return (
     <div
@@ -19,35 +22,46 @@ const PlayerList: FC<any> = ({
       }}
     >
       <div className="queue">
-        {videoQueue.map((video: VideoItem, index: any) => (
-          <div className="video__container" key={video.id}>
-            {index === 0 && <VolumeAnimatedIcon />}
-            {video.title && (
-              <p style={{ marginLeft: "10px" }}>
-                {index + 1}: {video.title}
-              </p>
-            )}
+        {videoQueue &&
+          videoQueue.map((video: VideoItem, index: any) => {
+            return (
+              <div className="video__container" key={video.id}>
+                {currentVideo &&
+                  currentVideo.id &&
+                  currentVideo.id === video.id && <VolumeAnimatedIcon />}
+                {video.title && (
+                  <p style={{ marginLeft: "10px" }}>
+                    {index + 1}: {video.title}
+                  </p>
+                )}
 
-            <p className="video__container_duration">{video.duration}</p>
-            <span
-              style={{ marginLeft: "5px", cursor: "pointer" }}
-              onClick={() => removeVideoFromQueue(video.id)}
-            >
-              <DeleteIcon />
-            </span>
-            <span
-              style={{ marginLeft: "5px", cursor: "pointer" }}
-              onClick={() => toggleFavorite(video)}
-            >
-              <StarEmptyIcon />
-            </span>
-            {video.added ? (
-              <p className="video__added">Added by {video.added}</p>
-            ) : (
-              <p className="video__added">Added by Anonymous</p>
-            )}
-          </div>
-        ))}
+                <p className="video__container_duration">{video.duration}</p>
+                <span
+                  style={{ marginLeft: "5px", cursor: "pointer" }}
+                  onClick={() => removeVideoFromQueue(video.id)}
+                >
+                  <DeleteIcon />
+                </span>
+                <span
+                  style={{ marginLeft: "5px", cursor: "pointer" }}
+                  onClick={() => toggleFavorite(video)}
+                >
+                  <StarEmptyIcon />
+                </span>
+                <span
+                  style={{ marginLeft: "5px", cursor: "pointer" }}
+                  onClick={() => switchToVideo(video.id)}
+                >
+                  <PlayIcon />
+                </span>
+                {video.added ? (
+                  <p className="video__added">Added by {video.added}</p>
+                ) : (
+                  <p className="video__added">Added by Anonymous</p>
+                )}
+              </div>
+            );
+          })}
       </div>
     </div>
   );

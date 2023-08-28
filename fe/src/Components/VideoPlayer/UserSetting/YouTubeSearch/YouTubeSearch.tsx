@@ -35,7 +35,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
       e.preventDefault();
 
       try {
-        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${process.env.REACT_APP_API_KEY}&type=video&maxResults=10`;
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${process.env.REACT_APP_API_KEY}&type=video&maxResults=20`;
         const searchResponse = await fetch(searchUrl);
         const searchData = await searchResponse.json();
 
@@ -55,18 +55,24 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
           throw new Error(detailsData.error.message);
         }
 
-        const resultsWithDetails = searchData.items.map((item: any) => {
-          const details = detailsData.items.find(
-            (detail: any) => detail.id === item.id.videoId
-          );
-          const duration = formatDuration(details?.contentDetails?.duration);
-          return {
-            id: item.id.videoId,
-            title: item.snippet.title,
-            duration,
-            views: details?.statistics?.viewCount,
-          };
-        });
+        const resultsWithDetails = searchData.items
+          .map((item: any) => {
+            const details = detailsData.items.find(
+              (detail: any) => detail.id === item.id.videoId
+            );
+            const duration = formatDuration(details?.contentDetails?.duration);
+            return {
+              id: item.id.videoId,
+              title: item.snippet.title,
+              duration,
+              views: details?.statistics?.viewCount,
+            };
+          })
+          .filter((item: any) => {
+            const [minutes, seconds] = item.duration.split(":").map(Number);
+            const totalSeconds = minutes * 60 + seconds;
+            return totalSeconds <= 420 && totalSeconds > 60; // 6 минут = 360 секунд
+          });
 
         setResults(resultsWithDetails);
       } catch (error) {

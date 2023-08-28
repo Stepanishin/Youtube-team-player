@@ -8,6 +8,7 @@ import UserSetting from "./UserSetting/UserSetting";
 import { VideoItem } from "../../types/VideoItem";
 import toast, { Toaster } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext/UserContext";
+import { VideoListContext } from "../../context/VideoListContext/VideoListContext";
 
 const serverEndpoint: string | undefined =
   process.env.REACT_APP_SERVER_ENDPOINT;
@@ -21,6 +22,12 @@ const VideoPlayer = () => {
   const [isFavoriteToggled, setIsFavoriteToggled] = useState(false);
   const [userCount, setUserCount] = useState(0);
 
+  const currentVideoRef = useRef(currentVideo);
+
+  useEffect(() => {
+    currentVideoRef.current = currentVideo;
+  }, [currentVideo]);
+
   const userContext = useContext(UserContext);
 
   if (!userContext) {
@@ -28,6 +35,10 @@ const VideoPlayer = () => {
   }
 
   const { user } = userContext;
+
+  const videoListContext = useContext(VideoListContext);
+
+  const { videoList, setVideoList } = videoListContext;
 
   const socketRef = useRef<Socket | null>(null);
 
@@ -37,12 +48,6 @@ const VideoPlayer = () => {
       return;
     }
     socketRef.current = socketIOClient(serverEndpoint);
-    socketRef.current.on("updateQueue", (queue) => {
-      setVideoQueue(queue);
-      if (currentVideo === null && queue.length > 0) {
-        setCurrentVideo(queue[0]);
-      }
-    });
 
     socketRef.current.on("setPlayPause", (isPlayingFromServer) => {
       setIsPlaying(isPlayingFromServer);
@@ -72,16 +77,54 @@ const VideoPlayer = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!serverEndpoint) {
+      console.error("SERVER_ENDPOINT is not defined");
+      return;
+    }
+    // socketRef.current = socketIOClient(serverEndpoint);
+
+    socketRef?.current?.on("updateQueue", (queue) => {
+      if (videoList!.length > 0) {
+        // Фильтруем видео, которых ещё нет в videoList
+        const newVideos = queue.filter(
+          (queueVideo: VideoItem) =>
+            !videoList!.some(
+              (listVideo: VideoItem) => listVideo.id === queueVideo.id
+            )
+        );
+
+        // Добавляем новые видео к videoList
+        if (newVideos.length > 0) {
+          setVideoList!([...videoList!, ...newVideos]);
+        }
+      } else {
+        // Если videoList пуст, просто устанавливаем его в значение queue
+        setVideoList!(queue);
+      }
+
+      setVideoQueue(queue);
+
+      if (currentVideoRef.current === null && queue.length > 0) {
+        setCurrentVideo(queue[0]);
+      }
+    });
+  }, [serverEndpoint, videoList]);
+
   const onEnd = () => {
     if (endTriggered) return;
     setEndTriggered(true);
 
-    const videoIdToRemove = currentVideo ? currentVideo.id : null;
+    const currentIndex = videoList!.findIndex(
+      (video) => video.id === currentVideo?.id
+    );
 
-    if (videoIdToRemove && serverEndpoint) {
-      if (socketRef.current) {
-        socketRef.current.emit("removeVideo", videoIdToRemove);
-      }
+    if (currentIndex !== -1 && currentIndex < videoList!.length - 1) {
+      // Если текущее видео не последнее в очереди, переключаемся на следующее
+      setCurrentVideo(videoList![currentIndex + 1]);
+    } else if (currentIndex === videoList!.length - 1) {
+      // Если текущее видео последнее в очереди, делаем что-то еще (например, переключаемся на первое видео или ставим текущее видео в null)
+      setCurrentVideo(videoList![0]);
     }
   };
 
@@ -140,7 +183,15 @@ const VideoPlayer = () => {
       socketRef.current.emit("removeVideo", videoId);
     }
 
+    // Удаление из videoQueue
     setVideoQueue(videoQueue.filter((video) => video.id !== videoId));
+
+    // Удаление из videoList
+    if (videoList) {
+      const newVideoList = videoList.filter((video) => video.id !== videoId);
+      setVideoList!(newVideoList);
+    }
+
     toast.success("Video was deleted!");
   };
 
@@ -199,12 +250,28 @@ const VideoPlayer = () => {
   };
 
   const shuffleVideoListHandler = () => {
-    if (!serverEndpoint) {
-      console.error("SERVER_ENDPOINT is not defined");
-      return;
+    const shuffledQueue = [...videoList!];
+    // Перемешивание массива (здесь можно использовать ваш алгоритм для перемешивания)
+    shuffledQueue.sort(() => Math.random() - 0.5);
+
+    if (currentVideo) {
+      const currentIndex = shuffledQueue.findIndex(
+        (video) => video.id === currentVideo.id
+      );
+      if (currentIndex !== -1) {
+        const [removed] = shuffledQueue.splice(currentIndex, 1);
+        shuffledQueue.unshift(removed);
+      }
     }
-    if (socketRef.current) {
-      socketRef.current.emit("shuffleVideoList");
+
+    setVideoQueue(shuffledQueue);
+    setVideoList!(shuffledQueue);
+  };
+
+  const switchToVideo = (videoId: string) => {
+    const videoToSwitch = videoList!.find((video) => video.id === videoId);
+    if (videoToSwitch) {
+      setCurrentVideo(videoToSwitch);
     }
   };
 
@@ -219,11 +286,12 @@ const VideoPlayer = () => {
         handlePlayPause={handlePlayPause}
         isPlaying={isPlaying}
         volume={volume}
-        videoQueue={videoQueue}
+        videoQueue={videoList}
         removeVideoFromQueue={removeVideoFromQueue}
         toggleFavorite={toggleFavorite}
         userCount={userCount}
         shuffleVideoListHandler={shuffleVideoListHandler}
+        switchToVideo={switchToVideo}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}
