@@ -1,5 +1,4 @@
 .VideoPlayer__wrapper {
-  /* background-color: rgb(255 255 255); */
   border: 1px solid rgb(209 213 219);
   position: relative;
 }
@@ -12,6 +11,12 @@
   display: flex;
   justify-content: flex-start;
   gap: 20px;
+}
+
+.VideoPlayer__left-side_wrapper__player-controller {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .current_title {
@@ -27,4 +32,17 @@
 .userCount_wrapper span {
   position: relative;
   top: -2px;
+}
+
+@media (max-width: 660px) {
+  .VideoPlayer__left-side_wrapper {
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: column;
+  }
+  .VideoPlayer__left-side_wrapper__player-controller {
+    align-items: center;
+    justify-content: center;
+  }
 }

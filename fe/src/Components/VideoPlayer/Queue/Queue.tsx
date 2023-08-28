@@ -39,13 +39,7 @@ const Queue: FC<any> = ({
             onReady={onReady}
           />
         )}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            position: "relative",
-          }}
-        >
+        <div className="VideoPlayer__left-side_wrapper__player-controller">
           <p>
             Current video:{" "}
             <span className="current_title">{currentVideo?.title}</span>
