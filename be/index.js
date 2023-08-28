@@ -94,12 +94,6 @@ io.on("connection", (socket) => {
       duration: "3:58",
       added: "default",
     },
-    {
-      id: "qolmz4FlnZ0",
-      title: "Lana Del Rey - Doin' Time",
-      duration: "4:25",
-      added: "default",
-    },
   ];
 
   let defaultQueue = shuffleArray(DEFAULT_VIDEOS);
