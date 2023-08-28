@@ -66,7 +66,7 @@ const FavoritePlayList: FC<any> = ({
         {favoriteList &&
           favoriteList.map((video) => (
             <div key={video.id + "favorite"} className="result-item">
-              <div>
+              <div className="result__icon-wrapper">
                 <span
                   className="result-button"
                   onClick={() =>

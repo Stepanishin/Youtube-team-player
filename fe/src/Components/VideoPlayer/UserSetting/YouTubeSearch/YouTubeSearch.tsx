@@ -95,7 +95,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
       <div className="results-container">
         {results.map((result) => (
           <div key={result.id} className="result-item">
-            <div>
+            <div className="result__icon-wrapper">
               <span
                 className="result-button"
                 onClick={() =>

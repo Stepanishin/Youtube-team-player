@@ -111,3 +111,9 @@ code {
 .light svg {
   fill: #111 !important;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
+}

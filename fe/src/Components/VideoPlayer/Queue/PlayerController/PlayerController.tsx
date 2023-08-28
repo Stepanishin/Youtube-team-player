@@ -16,7 +16,7 @@ const PlayerController: FC<any> = ({
   isPlaying,
   shuffleVideoListHandler,
 }) => {
-  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
+  // const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
   const prevVolume = useRef(volume);
 
   useEffect(() => {
@@ -41,14 +41,24 @@ const PlayerController: FC<any> = ({
   return (
     <div className="playerController">
       {volume === 0 ? (
-        <span style={{ cursor: "pointer" }} onClick={restoreVolume}>
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={restoreVolume}
+          // onMouseEnter={() => setHoveredIcon("unmute")}
+          // onMouseLeave={() => setHoveredIcon(null)}
+        >
           <VolumeXIcon />
-          {/* {showTooltip && <Tooltip>UnMute</Tooltip>} */}
+          {/* {hoveredIcon === "unmute" && <Tooltip>UnMute</Tooltip>} */}
         </span>
       ) : (
-        <span style={{ cursor: "pointer" }} onClick={muteVolume}>
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={muteVolume}
+          // onMouseEnter={() => setHoveredIcon("mute")}
+          // onMouseLeave={() => setHoveredIcon(null)}
+        >
           <VolumeIcon />
-          {/* {showTooltip && <Tooltip>Mute</Tooltip>} */}
+          {/* {hoveredIcon === "mute" && <Tooltip>Mute</Tooltip>} */}
         </span>
       )}
 
@@ -65,21 +75,21 @@ const PlayerController: FC<any> = ({
       <span
         style={{ cursor: "pointer" }}
         onClick={handlePlayPause}
-        onMouseEnter={() => setHoveredIcon("playpause")}
-        onMouseLeave={() => setHoveredIcon(null)}
+        // onMouseEnter={() => setHoveredIcon("playpause")}
+        // onMouseLeave={() => setHoveredIcon(null)}
       >
         {isPlaying ? <PauseIcon /> : <PlayIcon />}
-        {hoveredIcon === "playpause" && <Tooltip>Play/Pause</Tooltip>}
+        {/* {hoveredIcon === "playpause" && <Tooltip>Play/Pause</Tooltip>} */}
       </span>
 
       <span
         style={{ cursor: "pointer" }}
         onClick={shuffleVideoListHandler}
-        onMouseEnter={() => setHoveredIcon("shuffle")}
-        onMouseLeave={() => setHoveredIcon(null)}
+        // onMouseEnter={() => setHoveredIcon("shuffle")}
+        // onMouseLeave={() => setHoveredIcon(null)}
       >
         <ShuffleIcon />
-        {hoveredIcon === "shuffle" && <Tooltip>Shuffle</Tooltip>}
+        {/* {hoveredIcon === "shuffle" && <Tooltip>Shuffle</Tooltip>} */}
       </span>
     </div>
   );

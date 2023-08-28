@@ -55,3 +55,15 @@
 .result-button {
   cursor: pointer;
 }
+
+.result__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 550px) {
+  .search-input {
+    width: fit-content;
+  }
+}
