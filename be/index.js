@@ -139,7 +139,7 @@ io.on("connection", (socket) => {
 
   socket.on("togglePlayPause", (isPlaying) => {
     // Рассылка состояния проигрывания всем подключенным пользователям
-    io.emit("setPlayPause", isPlaying);
+    // io.emit("setPlayPause", isPlaying);
   });
 
   socket.on("shuffleVideoList", () => {
@@ -170,6 +170,7 @@ mongoose.connect(
 
 const userSchema = new mongoose.Schema({
   email: String,
+  role: String,
   favoriteVideos: [
     {
       id: String,
@@ -182,13 +183,13 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 app.post("/auth/google", async (req, res) => {
-  const { email } = req.body;
+  const { email, role } = req.body;
 
   try {
     let user = await User.findOne({ email });
 
     if (!user) {
-      user = new User({ email });
+      user = new User({ email, role });
       await user.save();
     }
 

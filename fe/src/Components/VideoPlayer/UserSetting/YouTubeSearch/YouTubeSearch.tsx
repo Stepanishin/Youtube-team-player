@@ -30,7 +30,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
     throw new Error("Header must be used within a UserProvider");
   }
 
-  const { user } = userContext;
+  const { user, role } = userContext;
   const { favoriteUserList, setFavoriteUserList } = favoriteContext;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,55 +94,62 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
 
   return (
     <div className="search-container">
-      <form onSubmit={searchYouTube}>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleChange}
-          className="search-input"
-        />
-        <button type="submit" className="search-button">
-          Search
-        </button>
-      </form>
-      <div className="results-container">
-        {results.map((result) => (
-          <div key={result.id} className="result-item">
-            <div className="result__icon-wrapper">
-              <span
-                className="result-button"
-                onClick={() =>
-                  onVideoSelect({
-                    id: result.id,
-                    title: result.title,
-                    duration: result.duration,
-                    ...(user ? { added: user } : {}),
-                  })
-                }
-              >
-                <AddIcon />
-              </span>
-              <span
-                style={{ marginLeft: "5px", cursor: "pointer" }}
-                onClick={() => toggleFavorite(result)}
-              >
-                {isVideoFavorite(result) ? (
-                  <StarSolidIcon />
-                ) : (
-                  <StarEmptyIcon />
-                )}
-              </span>
-            </div>
+      {user ? (
+        <>
+          <form onSubmit={searchYouTube}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleChange}
+              className="search-input"
+            />
+            <button type="submit" className="search-button">
+              Search
+            </button>
+          </form>
+          <div className="results-container">
+            {results.map((result) => (
+              <div key={result.id} className="result-item">
+                <div className="result__icon-wrapper">
+                  <span
+                    className="result-button"
+                    onClick={() =>
+                      onVideoSelect({
+                        id: result.id,
+                        title: result.title,
+                        duration: result.duration,
+                        ...(user ? { added: user } : {}),
+                      })
+                    }
+                  >
+                    <AddIcon />
+                  </span>
+                  <span
+                    style={{ marginLeft: "5px", cursor: "pointer" }}
+                    onClick={() => toggleFavorite(result)}
+                  >
+                    {isVideoFavorite(result) ? (
+                      <StarSolidIcon />
+                    ) : (
+                      <StarEmptyIcon />
+                    )}
+                  </span>
+                </div>
 
-            <p className="result-title">
-              {result.title.length > 50
-                ? result.title.slice(0, 40) + "..."
-                : result.title}
-            </p>
-            <p className="result-duration">{result.duration}</p>
+                <p className="result-title">
+                  {result.title.length > 50
+                    ? result.title.slice(0, 40) + "..."
+                    : result.title}
+                </p>
+                <p className="result-duration">{result.duration}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <div style={{ marginTop: "20px  " }}>You must log in</div>
+      )}
+
       <Toaster position="top-right" reverseOrder={false} />
     </div>
   );

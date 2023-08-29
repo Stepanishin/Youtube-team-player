@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import {
   PauseIcon,
   PlayIcon,
@@ -8,6 +8,7 @@ import {
 } from "../../../../assets/svg/svg";
 import "./PlayerController.css";
 import Tooltip from "../../../UI/Tooltip/Tooltip";
+import { UserContext } from "../../../../context/UserContext/UserContext";
 
 const PlayerController: FC<any> = ({
   volume,
@@ -16,7 +17,16 @@ const PlayerController: FC<any> = ({
   isPlaying,
   shuffleVideoListHandler,
 }) => {
-  // const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error(
+      "Component must be used within a UserProvider and FavoriteProvider"
+    );
+  }
+
+  const { user, role } = userContext;
+
   const prevVolume = useRef(volume);
 
   useEffect(() => {
@@ -41,24 +51,12 @@ const PlayerController: FC<any> = ({
   return (
     <div className="playerController">
       {volume === 0 ? (
-        <span
-          style={{ cursor: "pointer" }}
-          onClick={restoreVolume}
-          // onMouseEnter={() => setHoveredIcon("unmute")}
-          // onMouseLeave={() => setHoveredIcon(null)}
-        >
+        <span style={{ cursor: "pointer" }} onClick={restoreVolume}>
           <VolumeXIcon />
-          {/* {hoveredIcon === "unmute" && <Tooltip>UnMute</Tooltip>} */}
         </span>
       ) : (
-        <span
-          style={{ cursor: "pointer" }}
-          onClick={muteVolume}
-          // onMouseEnter={() => setHoveredIcon("mute")}
-          // onMouseLeave={() => setHoveredIcon(null)}
-        >
+        <span style={{ cursor: "pointer" }} onClick={muteVolume}>
           <VolumeIcon />
-          {/* {hoveredIcon === "mute" && <Tooltip>Mute</Tooltip>} */}
         </span>
       )}
 
@@ -72,25 +70,15 @@ const PlayerController: FC<any> = ({
         onChange={handleVolumeChange}
         className="range-input"
       />
-      <span
-        style={{ cursor: "pointer" }}
-        onClick={handlePlayPause}
-        // onMouseEnter={() => setHoveredIcon("playpause")}
-        // onMouseLeave={() => setHoveredIcon(null)}
-      >
+      <span style={{ cursor: "pointer" }} onClick={handlePlayPause}>
         {isPlaying ? <PauseIcon /> : <PlayIcon />}
-        {/* {hoveredIcon === "playpause" && <Tooltip>Play/Pause</Tooltip>} */}
       </span>
 
-      <span
-        style={{ cursor: "pointer" }}
-        onClick={shuffleVideoListHandler}
-        // onMouseEnter={() => setHoveredIcon("shuffle")}
-        // onMouseLeave={() => setHoveredIcon(null)}
-      >
-        <ShuffleIcon />
-        {/* {hoveredIcon === "shuffle" && <Tooltip>Shuffle</Tooltip>} */}
-      </span>
+      {user && role === "admin" && (
+        <span style={{ cursor: "pointer" }} onClick={shuffleVideoListHandler}>
+          <ShuffleIcon />
+        </span>
+      )}
     </div>
   );
 };

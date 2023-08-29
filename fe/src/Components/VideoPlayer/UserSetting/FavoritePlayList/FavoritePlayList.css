@@ -3,3 +3,16 @@
   align-items: center;
   justify-content: center;
 }
+
+.FavoritePlayList__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.FavoritePlayList__results-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

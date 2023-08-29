@@ -8,6 +8,7 @@ import {
   VolumeAnimatedIcon,
 } from "../../../../assets/svg/svg";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
+import { UserContext } from "../../../../context/UserContext/UserContext";
 
 const PlayerList: FC<any> = ({
   videoQueue,
@@ -15,14 +16,16 @@ const PlayerList: FC<any> = ({
   toggleFavorite,
 }) => {
   const favoriteContext = useContext(FavoriteContext);
+  const userContext = useContext(UserContext);
 
-  if (!favoriteContext) {
+  if (!favoriteContext || !userContext) {
     throw new Error(
       "Component must be used within a UserProvider and FavoriteProvider"
     );
   }
 
   const { favoriteUserList, setFavoriteUserList } = favoriteContext;
+  const { user, role } = userContext;
 
   const isVideoFavorite = (video: VideoItem) => {
     return favoriteUserList.some(
@@ -46,12 +49,15 @@ const PlayerList: FC<any> = ({
             )}
 
             <p className="video__container_duration">{video.duration}</p>
-            <span
-              style={{ marginLeft: "5px", cursor: "pointer" }}
-              onClick={() => removeVideoFromQueue(video.id)}
-            >
-              <DeleteIcon />
-            </span>
+            {user && role === "admin" && (
+              <span
+                style={{ marginLeft: "5px", cursor: "pointer" }}
+                onClick={() => removeVideoFromQueue(video.id)}
+              >
+                <DeleteIcon />
+              </span>
+            )}
+
             <span
               style={{ marginLeft: "5px", cursor: "pointer" }}
               onClick={() => toggleFavorite(video)}

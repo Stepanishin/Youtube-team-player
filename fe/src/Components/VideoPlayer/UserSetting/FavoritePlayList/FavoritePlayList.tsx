@@ -69,13 +69,13 @@ const FavoritePlayList: FC<any> = ({
   };
 
   return (
-    <div>
-      <div className="results-container">
-        {favoriteUserList && user && (
-          <button className="button" onClick={addAllFavorite}>
-            Add all to queue
-          </button>
-        )}
+    <div className="FavoritePlayList__container">
+      {favoriteUserList && user && (
+        <button className="button" onClick={addAllFavorite}>
+          Add all to queue
+        </button>
+      )}
+      <div className="FavoritePlayList__results-container">
         {favoriteUserList &&
           favoriteUserList.map((video) => (
             <div key={video.id + "favorite"} className="result-item">
@@ -113,11 +113,12 @@ const FavoritePlayList: FC<any> = ({
               <p className="result-duration">{video.duration}</p>
             </div>
           ))}
-        {favoriteUserList && favoriteUserList.length === 0 && (
-          <div style={{ marginTop: "20px  " }}>No favorite videos</div>
-        )}
-        {!user && <div style={{ marginTop: "20px  " }}>You must log in</div>}
       </div>
+
+      {!user && <div style={{ marginTop: "20px  " }}>You must log in</div>}
+      {user && favoriteUserList && favoriteUserList.length === 0 && (
+        <div style={{ marginTop: "20px  " }}>No favorite videos</div>
+      )}
     </div>
   );
 };

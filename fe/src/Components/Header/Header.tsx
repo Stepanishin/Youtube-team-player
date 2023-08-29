@@ -1,20 +1,22 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import "./Header.css";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext/UserContext";
 import { useGoogleLogin } from "@react-oauth/google";
-import { googleLogout } from "@react-oauth/google";
 import { GoogleIcon } from "../../assets/svg/svg";
 import DarkModeToggle from "../UI/DarkModeToggle/DarkModeToggle";
+import { FavoriteContext } from "../../context/FavoriteContext/FavoriteContext";
 
 const Header = () => {
   const userContext = useContext(UserContext);
+  const favoriteContext = useContext(FavoriteContext);
 
-  if (!userContext) {
+  if (!userContext || !favoriteContext) {
     throw new Error("Header must be used within a UserProvider");
   }
 
-  const { user, setUser, picture, setPicture } = userContext;
+  const { user, setUser, picture, setPicture, role, setRole } = userContext;
+  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
 
   const beLogin = async (email?: any, picture?: any) => {
     try {
@@ -22,10 +24,13 @@ const Header = () => {
         `${process.env.REACT_APP_SERVER_ENDPOINT}/auth/google`,
         {
           email: email,
+          role: "user",
         }
       );
       setUser(email);
       setPicture(picture);
+      setRole(response.data.user.role);
+      setFavoriteUserList(response.data.user.favoriteVideos);
     } catch (error) {
       console.error("Authentication failed:", error);
     }

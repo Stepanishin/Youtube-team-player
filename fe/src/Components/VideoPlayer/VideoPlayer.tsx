@@ -24,7 +24,7 @@ const VideoPlayer = () => {
   const userContext = useContext(UserContext);
 
   if (!userContext) {
-    throw new Error("Header must be used within a UserProvider");
+    throw new Error("VideoPlayer must be used within a UserProvider");
   }
 
   const { user } = userContext;
