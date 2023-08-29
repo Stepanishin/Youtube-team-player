@@ -44,6 +44,34 @@ let userQueue = [];
 // Количество подключенных пользователей
 let connectedUsers = 0;
 
+// Дефолтная очередь
+const DEFAULT_VIDEOS = [
+  {
+    id: "TdrL3QxjyVw",
+    title: "Lana Del Rey - Summertime Sadness",
+    duration: "4:25",
+    added: "default",
+  },
+  {
+    id: "MiAoetOXKcY",
+    title: "Lana Del Rey - Say Yes To Heaven ",
+    duration: "3:29",
+    added: "default",
+  },
+  // {
+  //   id: "Bag1gUxuU0g",
+  //   title: "Lana Del Rey - Born To Die",
+  //   duration: "4:46",
+  //   added: "default",
+  // },
+  {
+    id: "o_1aF54DO60",
+    title: "Lana Del Rey - Young and Beautiful",
+    duration: "3:58",
+    added: "default",
+  },
+];
+
 // return shuffled array
 function shuffleArray(array) {
   const shuffledArray = [...array];
@@ -69,34 +97,6 @@ function shuffleExceptFirst(array) {
 
 io.on("connection", (socket) => {
   console.log("New client connected", socket.id);
-  const DEFAULT_VIDEOS = [
-    {
-      id: "TdrL3QxjyVw",
-      title: "Lana Del Rey - Summertime Sadness",
-      duration: "4:25",
-      added: "default",
-    },
-    {
-      id: "MiAoetOXKcY",
-      title: "Lana Del Rey - Say Yes To Heaven ",
-      duration: "3:29",
-      added: "default",
-    },
-    {
-      id: "Bag1gUxuU0g",
-      title: "Lana Del Rey - Born To Die",
-      duration: "4:46",
-      added: "default",
-    },
-    {
-      id: "o_1aF54DO60",
-      title: "Lana Del Rey - Young and Beautiful",
-      duration: "3:58",
-      added: "default",
-    },
-  ];
-
-  let defaultQueue = shuffleArray(DEFAULT_VIDEOS);
 
   connectedUsers++;
   io.emit("getUsersCount", connectedUsers);
@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
   if (userQueue.length > 1) {
     socket.emit("updateQueue", [...userQueue]);
   } else {
-    socket.emit("updateQueue", [...userQueue, ...defaultQueue]);
+    socket.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
   }
 
   socket.on("addVideo", (video) => {
@@ -116,24 +116,44 @@ io.on("connection", (socket) => {
 
     userQueue.push(video);
 
-    if (userQueue.length > 1) {
+    // Добавление видео в DEFAULT_VIDEOS, если его там нет
+    if (!DEFAULT_VIDEOS.some((v) => v.id === video.id)) {
+      DEFAULT_VIDEOS.push(video);
+    }
+
+    if (userQueue.length > 0) {
       io.emit("updateQueue", [...userQueue]);
     } else {
-      io.emit("updateQueue", [...userQueue, ...defaultQueue]);
+      io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
     }
-    // после успешного добавления видео
     socket.emit("videoAdded");
   });
 
-  // Обработчик события удаления видео из очереди
+  // Обработчик события удаления видео из очереди запущенного администратором
   socket.on("removeVideo", (videoId) => {
     userQueue = userQueue.filter((v) => v.id !== videoId);
-    defaultQueue = defaultQueue.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
+    DEFAULT_VIDEOS = DEFAULT_VIDEOS.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
 
     if (userQueue.length > 1) {
       io.emit("updateQueue", [...userQueue]);
     } else {
-      io.emit("updateQueue", [...userQueue, ...defaultQueue]);
+      io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
+    }
+  });
+
+  // Обработчик события удаления видео из очереди после его окончания
+  socket.on("removeVideoBySwitching", (videoId) => {
+    userQueue = userQueue.filter((v) => v.id !== videoId);
+
+    // Переход к проигрыванию DEFAULT_VIDEOS, если userQueue пуст
+    if (userQueue.length === 0) {
+      userQueue = [...DEFAULT_VIDEOS]; // Копируем DEFAULT_VIDEOS в userQueue
+    }
+
+    if (userQueue.length > 0) {
+      io.emit("updateQueue", [...userQueue]);
+    } else {
+      io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
     }
   });
 
@@ -147,9 +167,8 @@ io.on("connection", (socket) => {
       userQueue = shuffleExceptFirst(userQueue);
       io.emit("updateQueue", [...userQueue]);
     } else {
-      io.emit("updateQueue", [...defaultQueue]);
+      io.emit("updateQueue", [...DEFAULT_VIDEOS]);
     }
-    // io.emit("updateQueue", userQueue);
   });
 
   socket.on("disconnect", () => {

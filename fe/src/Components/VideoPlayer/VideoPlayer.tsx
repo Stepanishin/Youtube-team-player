@@ -80,9 +80,10 @@ const VideoPlayer = () => {
 
     if (videoIdToRemove && serverEndpoint) {
       if (socketRef.current) {
-        socketRef.current.emit("removeVideo", videoIdToRemove);
+        socketRef.current.emit("removeVideoBySwitching", videoIdToRemove);
       }
     }
+    console.log("videoQueue", videoQueue);
   };
 
   const opts: YouTubeProps["opts"] = {
