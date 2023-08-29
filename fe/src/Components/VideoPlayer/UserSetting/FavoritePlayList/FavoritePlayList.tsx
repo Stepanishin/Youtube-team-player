@@ -1,9 +1,14 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import "./FavoritePlayList.css";
-import { VideoItem } from "../../../../types/VideoItem";
 import { UserContext } from "../../../../context/UserContext/UserContext";
 import axios from "axios";
-import { AddIcon, StarEmptyIcon } from "../../../../assets/svg/svg";
+import {
+  AddIcon,
+  StarEmptyIcon,
+  StarSolidIcon,
+} from "../../../../assets/svg/svg";
+import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
+import { VideoItem } from "../../../../types/VideoItem";
 
 const FavoritePlayList: FC<any> = ({
   toggleFavorite,
@@ -11,14 +16,16 @@ const FavoritePlayList: FC<any> = ({
   isFavoriteToggled,
 }) => {
   const userContext = useContext(UserContext);
+  const favoriteContext = useContext(FavoriteContext);
 
-  if (!userContext) {
-    throw new Error("Header must be used within a UserProvider");
+  if (!userContext || !favoriteContext) {
+    throw new Error(
+      "Component must be used within a UserProvider and FavoriteProvider"
+    );
   }
 
   const { user } = userContext;
-
-  const [favoriteList, setFavoriteList] = useState<VideoItem[] | null>(null);
+  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -33,7 +40,7 @@ const FavoritePlayList: FC<any> = ({
             }
           );
           if (response) {
-            setFavoriteList(response.data.favoriteVideos);
+            setFavoriteUserList(response.data.favoriteVideos);
           }
         }
       } catch (error) {}
@@ -43,8 +50,8 @@ const FavoritePlayList: FC<any> = ({
   }, [user, isFavoriteToggled]);
 
   const addAllFavorite = () => {
-    if (favoriteList && favoriteList.length > 0) {
-      favoriteList.forEach((video) => {
+    if (favoriteUserList && favoriteUserList.length > 0) {
+      favoriteUserList.forEach((video) => {
         onVideoSelect({
           id: video.id,
           title: video.title,
@@ -55,16 +62,22 @@ const FavoritePlayList: FC<any> = ({
     }
   };
 
+  const isVideoFavorite = (video: VideoItem) => {
+    return favoriteUserList.some(
+      (favoriteVideo) => favoriteVideo.id === video.id
+    );
+  };
+
   return (
     <div>
       <div className="results-container">
-        {favoriteList && (
+        {favoriteUserList && user && (
           <button className="button" onClick={addAllFavorite}>
             Add all to queue
           </button>
         )}
-        {favoriteList &&
-          favoriteList.map((video) => (
+        {favoriteUserList &&
+          favoriteUserList.map((video) => (
             <div key={video.id + "favorite"} className="result-item">
               <div className="result__icon-wrapper">
                 <span
@@ -84,7 +97,11 @@ const FavoritePlayList: FC<any> = ({
                   style={{ marginLeft: "5px", cursor: "pointer" }}
                   onClick={() => toggleFavorite(video)}
                 >
-                  <StarEmptyIcon />
+                  {isVideoFavorite(video) ? (
+                    <StarSolidIcon />
+                  ) : (
+                    <StarEmptyIcon />
+                  )}
                 </span>
               </div>
 
@@ -96,7 +113,7 @@ const FavoritePlayList: FC<any> = ({
               <p className="result-duration">{video.duration}</p>
             </div>
           ))}
-        {favoriteList && favoriteList.length === 0 && (
+        {favoriteUserList && favoriteUserList.length === 0 && (
           <div style={{ marginTop: "20px  " }}>No favorite videos</div>
         )}
         {!user && <div style={{ marginTop: "20px  " }}>You must log in</div>}

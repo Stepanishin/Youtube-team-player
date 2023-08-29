@@ -3,8 +3,13 @@ import "./YouTubeSearch.css";
 import { formatDuration } from "../../../../helpers/formatDuration";
 import { VideoItem } from "../../../../types/VideoItem";
 import toast, { Toaster } from "react-hot-toast";
-import { AddIcon, StarEmptyIcon } from "../../../../assets/svg/svg";
+import {
+  AddIcon,
+  StarEmptyIcon,
+  StarSolidIcon,
+} from "../../../../assets/svg/svg";
 import { UserContext } from "../../../../context/UserContext/UserContext";
+import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -19,12 +24,14 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
   const [results, setResults] = useState<any[]>([]);
 
   const userContext = useContext(UserContext);
+  const favoriteContext = useContext(FavoriteContext);
 
-  if (!userContext) {
+  if (!userContext || !favoriteContext) {
     throw new Error("Header must be used within a UserProvider");
   }
 
   const { user } = userContext;
+  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -79,6 +86,12 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
     [searchTerm]
   );
 
+  const isVideoFavorite = (video: VideoItem) => {
+    return favoriteUserList.some(
+      (favoriteVideo) => favoriteVideo.id === video.id
+    );
+  };
+
   return (
     <div className="search-container">
       <form onSubmit={searchYouTube}>
@@ -113,7 +126,11 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
                 style={{ marginLeft: "5px", cursor: "pointer" }}
                 onClick={() => toggleFavorite(result)}
               >
-                <StarEmptyIcon />
+                {isVideoFavorite(result) ? (
+                  <StarSolidIcon />
+                ) : (
+                  <StarEmptyIcon />
+                )}
               </span>
             </div>
 

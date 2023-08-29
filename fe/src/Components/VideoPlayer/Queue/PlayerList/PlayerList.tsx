@@ -1,17 +1,34 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import "./PlayerList.css";
 import { VideoItem } from "../../../../types/VideoItem";
 import {
   DeleteIcon,
   StarEmptyIcon,
+  StarSolidIcon,
   VolumeAnimatedIcon,
 } from "../../../../assets/svg/svg";
+import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
 
 const PlayerList: FC<any> = ({
   videoQueue,
   removeVideoFromQueue,
   toggleFavorite,
 }) => {
+  const favoriteContext = useContext(FavoriteContext);
+
+  if (!favoriteContext) {
+    throw new Error(
+      "Component must be used within a UserProvider and FavoriteProvider"
+    );
+  }
+
+  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
+
+  const isVideoFavorite = (video: VideoItem) => {
+    return favoriteUserList.some(
+      (favoriteVideo) => favoriteVideo.id === video.id
+    );
+  };
   return (
     <div
       style={{
@@ -39,7 +56,7 @@ const PlayerList: FC<any> = ({
               style={{ marginLeft: "5px", cursor: "pointer" }}
               onClick={() => toggleFavorite(video)}
             >
-              <StarEmptyIcon />
+              {isVideoFavorite(video) ? <StarSolidIcon /> : <StarEmptyIcon />}
             </span>
             {video.added ? (
               <p className="video__added">Added by {video.added}</p>
