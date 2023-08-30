@@ -209,6 +209,17 @@ const VideoPlayer = () => {
     }
   };
 
+  const updateVideoQueueByDragAndDrop = (
+    newQueue: VideoItem[],
+    isEnd: boolean = false
+  ) => {
+    setVideoQueue(newQueue);
+
+    if (socketRef.current && isEnd === true) {
+      socketRef.current.emit("updateQueueByDragAndDrop", newQueue);
+    }
+  };
+
   return (
     <div className="video-container">
       <Queue
@@ -225,6 +236,7 @@ const VideoPlayer = () => {
         toggleFavorite={toggleFavorite}
         userCount={userCount}
         shuffleVideoListHandler={shuffleVideoListHandler}
+        updateVideoQueue={updateVideoQueueByDragAndDrop}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}
