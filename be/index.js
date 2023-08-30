@@ -45,7 +45,7 @@ let userQueue = [];
 let connectedUsers = 0;
 
 // Дефолтная очередь
-const DEFAULT_VIDEOS = [
+let DEFAULT_VIDEOS = [
   {
     id: "TdrL3QxjyVw",
     title: "Lana Del Rey - Summertime Sadness",
@@ -169,6 +169,11 @@ io.on("connection", (socket) => {
     } else {
       io.emit("updateQueue", [...DEFAULT_VIDEOS]);
     }
+  });
+
+  socket.on("updateQueueByDragAndDrop", (newQueue) => {
+    userQueue = newQueue;
+    io.emit("updateQueue", [...userQueue]);
   });
 
   socket.on("disconnect", () => {
