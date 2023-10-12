@@ -5,7 +5,7 @@ import "./VideoPlayer.css";
 import socketIOClient, { Socket } from "socket.io-client";
 import Queue from "./Queue/Queue";
 import UserSetting from "./UserSetting/UserSetting";
-import { VideoItem } from "../../types/VideoItem";
+import { VideoItem } from "../../utils/types/video-item.type";
 import toast, { Toaster } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext/UserContext";
 

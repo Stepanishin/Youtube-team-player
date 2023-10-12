@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, createContext, useState } from "react";
-import { VideoItem } from "../../types/VideoItem";
+import { VideoItem } from "../../utils/types/video-item.type";
 
 interface IFavoriteContext {
   favoriteUserList: VideoItem[];

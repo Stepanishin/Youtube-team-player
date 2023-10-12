@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import "./YouTubeSearch.css";
-import { formatDuration } from "../../../../helpers/formatDuration";
-import { VideoItem } from "../../../../types/VideoItem";
+import { formatDuration } from "../../../../utils/helpers/formatDuration";
+import { VideoItem } from "../../../../utils/types/video-item.type";
 import toast, { Toaster } from "react-hot-toast";
 import {
   AddIcon,
@@ -10,6 +10,7 @@ import {
 } from "../../../../assets/svg/svg";
 import { UserContext } from "../../../../context/UserContext/UserContext";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
+import DefaultButton from "../../../UI/DefaultButton/DefaultButton";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -30,8 +31,8 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
     throw new Error("Header must be used within a UserProvider");
   }
 
-  const { user, role } = userContext;
-  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
+  const { user } = userContext;
+  const { favoriteUserList } = favoriteContext;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -103,9 +104,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
               onChange={handleChange}
               className="search-input"
             />
-            <button type="submit" className="search-button">
-              Search
-            </button>
+            <DefaultButton>SEARCH</DefaultButton>
           </form>
           <div className="results-container">
             {results.map((result) => (
