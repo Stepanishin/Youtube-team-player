@@ -62,8 +62,11 @@ const Header = () => {
             </div>
           </button>
         ) : (
-          <button className="google-button" onClick={() => googleLogin()}>
-            <GoogleIcon /> Sign in with Google
+          <button
+            className="google-button text-button_Default"
+            onClick={() => googleLogin()}
+          >
+            <GoogleIcon /> LOG IN
           </button>
         )}
       </div>

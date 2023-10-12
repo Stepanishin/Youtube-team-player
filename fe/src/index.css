@@ -75,7 +75,7 @@ code {
   height: 100%;
 }
 
-.light {
+/* .light {
   background-color: white;
   color: #111 !important;
 }
@@ -83,7 +83,7 @@ code {
 .dark {
   background-color: #111;
   color: #bbb !important;
-}
+} */
 
 .container {
   max-width: 1366px;

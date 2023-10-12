@@ -10,6 +10,7 @@ import {
 } from "../../../../assets/svg/svg";
 import { UserContext } from "../../../../context/UserContext/UserContext";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
+import DefaultButton from "../../../UI/DefaultButton/DefaultButton";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -103,9 +104,10 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
               onChange={handleChange}
               className="search-input"
             />
-            <button type="submit" className="search-button">
+            <DefaultButton label={"Search"} />
+            {/* <button type="submit" className="search-button">
               Search
-            </button>
+            </button> */}
           </form>
           <div className="results-container">
             {results.map((result) => (
