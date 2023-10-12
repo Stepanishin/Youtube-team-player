@@ -9,8 +9,16 @@ interface DefaultButtonProps {
 }
 
 const stylesByType = {
-  light: "text-button_Default bg-button-btnLight",
-  dark: "text-button_Default bg-button-btnDark",
+  light: {
+    default: "text-button_Default bg-button-btnLight",
+    hover: "hover:bg-button-btnLightHover",
+    focus: "focus:ring-offset-2 focus:ring-4 focus:ring-button-btnLight",
+  },
+  dark: {
+    default: "text-button_Default bg-button-btnDark",
+    hover: "hover:bg-button-btnDarkHover",
+    focus: "focus:ring-offset-2 focus:ring-2 focus:ring-button-btnDark",
+  },
 };
 
 const DefaultButton: FC<DefaultButtonProps> = ({
@@ -23,7 +31,7 @@ const DefaultButton: FC<DefaultButtonProps> = ({
   return (
     <button
       type="submit"
-      className={`${stylesByType[mode]} w-full px-3 py-2 text-neutral-white rounded-[5px] ${className}`}
+      className={`${stylesByType[mode].default} ${stylesByType[mode].hover} ${stylesByType[mode].focus} w-full px-3 py-2 text-neutral-white rounded-[5px] ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
