@@ -1,6 +1,6 @@
 import React, { FC, useContext, useRef } from "react";
 import "./PlayerList.css";
-import { VideoItem } from "../../../../types/VideoItem";
+import { VideoItem } from "../../../../utils/types/video-item.type";
 import {
   DeleteIcon,
   DragAndDropIcon,

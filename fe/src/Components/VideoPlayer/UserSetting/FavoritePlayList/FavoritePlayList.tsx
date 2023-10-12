@@ -8,7 +8,7 @@ import {
   StarSolidIcon,
 } from "../../../../assets/svg/svg";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
-import { VideoItem } from "../../../../types/VideoItem";
+import { VideoItem } from "../../../../utils/types/video-item.type";
 
 const FavoritePlayList: FC<any> = ({
   toggleFavorite,
