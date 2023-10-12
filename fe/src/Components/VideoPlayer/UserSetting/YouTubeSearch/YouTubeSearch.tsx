@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState } from "react";
 import "./YouTubeSearch.css";
-import { formatDuration } from "../../../../helpers/formatDuration";
+import { formatDuration } from "../../../../utils/helpers/formatDuration";
 import { VideoItem } from "../../../../utils/types/video-item.type";
 import toast, { Toaster } from "react-hot-toast";
 import {
