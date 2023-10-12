@@ -2,10 +2,10 @@ import React, { FC, useContext } from "react";
 import { ThemeContext } from "../../../context/ThemeContext/ThemeContext";
 
 interface DefaultButtonProps {
-  label: string;
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  children: React.ReactNode;
 }
 
 const stylesByType = {
@@ -22,20 +22,20 @@ const stylesByType = {
 };
 
 const DefaultButton: FC<DefaultButtonProps> = ({
-  label,
   className = "",
   onClick,
   disabled = false,
+  children,
 }) => {
   const { mode } = useContext(ThemeContext);
   return (
     <button
       type="submit"
-      className={`${stylesByType[mode].default} ${stylesByType[mode].hover} ${stylesByType[mode].focus} w-full px-3 py-2 text-neutral-white rounded-[5px] ${className}`}
+      className={`${stylesByType[mode].default} ${stylesByType[mode].hover} ${stylesByType[mode].focus} flex justify-center font-nunitoSans w-full px-3 py-2 text-neutral-white rounded-[5px] ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
-      {label.toLocaleUpperCase()}
+      {children}
     </button>
   );
 };

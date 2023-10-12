@@ -26,9 +26,9 @@ module.exports = {
         bgLight100: "#FFFFFF",
         bgLight200: "#FDFDFD",
         bgLight300: "#F9F9F9",
-        bgDark200: "#12333F",
-        bgDark300: "#0B2D39",
-        bgDark400: "#032633",
+        bgDark100: "#12333F",
+        bgDark200: "#0B2D39",
+        bgDark300: "#032633",
       },
       button: {
         btnLight: "#032633",
@@ -94,7 +94,7 @@ module.exports = {
           fontWeight: "600",
           lineHeight: "14px",
           letterSpacing: "-0.5%",
-          fontFamily: "Montserrat, sans-serif",
+          fontFamily: "montserrat",
         },
       ],
       p1_Large: [
@@ -170,7 +170,11 @@ module.exports = {
         },
       ],
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };

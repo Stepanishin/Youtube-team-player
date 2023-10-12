@@ -31,8 +31,8 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
     throw new Error("Header must be used within a UserProvider");
   }
 
-  const { user, role } = userContext;
-  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
+  const { user } = userContext;
+  const { favoriteUserList } = favoriteContext;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -104,10 +104,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
               onChange={handleChange}
               className="search-input"
             />
-            <DefaultButton label={"Search"} />
-            {/* <button type="submit" className="search-button">
-              Search
-            </button> */}
+            <DefaultButton>SEARCH</DefaultButton>
           </form>
           <div className="results-container">
             {results.map((result) => (

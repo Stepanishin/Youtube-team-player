@@ -22,9 +22,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     setMode((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
+  const themeStyles =
+    mode === "dark" ? "bg-background-bgDark300" : "bg-background-bgLight300";
+
   return (
     <ThemeContext.Provider value={{ toggle, mode }}>
-      <div className={`theme ${mode}`}>{children}</div>
+      <div className={`theme min-h-[100vh] ${themeStyles}`}>{children}</div>
     </ThemeContext.Provider>
   );
 };
