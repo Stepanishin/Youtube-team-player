@@ -34,8 +34,10 @@ const Queue: FC<any> = ({
   return (
     <div
       className={`${
-        mode === "dark" ? "bg-background-bgDark100" : "bg-background-bgLight200"
-      } p-6 md:p-8 flex flex-col`}
+        mode === "dark"
+          ? "bg-background-bgDark100"
+          : "bg-background-bgLight200 border-solid border-accent-gray200 border"
+      } p-6 md:p-8 flex flex-col rounded-md w-full`}
     >
       <div className="flex flex-col md:flex-row items-start gap-4 md:items-start">
         {currentVideo && (
