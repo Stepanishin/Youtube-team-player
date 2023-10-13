@@ -144,12 +144,11 @@ const VideoPlayer = () => {
     toast.success("Video was deleted!");
   };
 
-  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseInt(event.target.value, 10);
-    setVolume(newVolume);
+  const handleVolumeChange = (value: number) => {
+    setVolume(value);
 
     if (playerRef.current && playerRef.current.internalPlayer) {
-      playerRef.current.internalPlayer.setVolume(newVolume);
+      playerRef.current.internalPlayer.setVolume(value);
     }
   };
 

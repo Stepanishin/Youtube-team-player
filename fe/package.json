@@ -17,6 +17,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
+    "react-range": "^1.8.14",
     "react-scripts": "5.0.1",
     "react-youtube": "^10.1.0",
     "socket.io-client": "^4.7.2",

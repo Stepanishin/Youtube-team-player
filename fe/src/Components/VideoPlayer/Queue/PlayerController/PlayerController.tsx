@@ -9,8 +9,8 @@ import {
   VolumeIncreaseIcon,
   VolumeXIcon,
 } from "../../../../assets/svg/svg";
-import "./PlayerController.css";
 import { UserContext } from "../../../../context/UserContext/UserContext";
+import RangeInput from "@/Components/UI/RangeInput/RangeInput";
 
 const PlayerController: FC<any> = ({
   volume,
@@ -38,17 +38,11 @@ const PlayerController: FC<any> = ({
   }, [volume]);
 
   const muteVolume = () => {
-    const event = {
-      target: { value: "0" },
-    } as React.ChangeEvent<HTMLInputElement>;
-    handleVolumeChange(event);
+    handleVolumeChange(0);
   };
 
   const restoreVolume = () => {
-    const event = {
-      target: { value: prevVolume.current.toString() },
-    } as React.ChangeEvent<HTMLInputElement>;
-    handleVolumeChange(event);
+    handleVolumeChange(prevVolume.current);
   };
 
   return (
@@ -79,17 +73,8 @@ const PlayerController: FC<any> = ({
             <VolumeDecreaseIcon />
           </span>
         )}
-        <input
-          type="range"
-          id="volume"
-          name="volume"
-          min="0"
-          max="100"
-          value={volume}
-          onChange={handleVolumeChange}
-          className="range-input"
-        />
-        <span className="cursor-pointer">
+        <RangeInput volume={volume} handleVolumeChange={handleVolumeChange} />
+        <span>
           <VolumeIncreaseIcon />
         </span>
         <span className="cursor-pointer" onClick={handlePlayPause}>

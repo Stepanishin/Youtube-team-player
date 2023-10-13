@@ -3,7 +3,6 @@ import Tooltip from "../../Components/UI/Tooltip/Tooltip";
 import { ThemeContext } from "@/context/ThemeContext/ThemeContext";
 
 export const VolumeIncreaseIcon = () => {
-  const [showTooltip, setShowTooltip] = useState(false);
   const { mode } = useContext(ThemeContext);
 
   const color = mode === "dark" ? "#fff" : "#000";
@@ -16,16 +15,12 @@ export const VolumeIncreaseIcon = () => {
         viewBox="0 0 26 24"
         fill={color}
         xmlns="http://www.w3.org/2000/svg"
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
       >
         <path
           d="M15.5857 24V21.1886C17.6429 20.5943 19.3 19.4514 20.5571 17.76C21.8143 16.0686 22.4429 14.1486 22.4429 12C22.4429 9.85143 21.8143 7.93143 20.5571 6.24C19.3 4.54857 17.6429 3.40571 15.5857 2.81143V0C18.42 0.64 20.7286 2.07429 22.5114 4.30286C24.2943 6.53143 25.1857 9.09714 25.1857 12C25.1857 14.9029 24.2943 17.4686 22.5114 19.6971C20.7286 21.9257 18.42 23.36 15.5857 24ZM0.5 16.1486V7.92H5.98571L12.8429 1.06286V23.0057L5.98571 16.1486H0.5ZM15.5857 17.52V6.48C16.66 6.98286 17.5 7.73714 18.1057 8.74286C18.7114 9.74857 19.0143 10.8457 19.0143 12.0343C19.0143 13.2 18.7114 14.28 18.1057 15.2743C17.5 16.2686 16.66 17.0171 15.5857 17.52Z"
           fill={color}
         />
       </svg>
-
-      {showTooltip && <Tooltip>Mute</Tooltip>}
     </div>
   );
 };

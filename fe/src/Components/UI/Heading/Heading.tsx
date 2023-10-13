@@ -16,27 +16,27 @@ interface HeadingProps {
 
 const textStyles = {
   h1_Large: {
-    light: "text-primary-blackPetrol",
-    dark: "text-neutral-white",
+    light: "text-primary-blackPetrol text-[24px] font-bold leading-8",
+    dark: "text-neutral-white text-[24px] font-bold leading-8",
   },
   h1_Small: {
-    light: "text-primary-blackPetrol",
-    dark: "text-neutral-white",
+    light: "text-primary-blackPetrol text-[20px] font-bold leading-7",
+    dark: "text-neutral-white text-[20px] font-bold leading-7",
   },
   h2_Large: {
-    light: "text-primary-blackPetrol",
-    dark: "text-neutral-white",
+    light: "text-primary-blackPetrol text-[20px] font-semibold leading-7",
+    dark: "text-neutral-white text-[20px] font-semibold leading-7",
   },
   h2_Small: {
-    light: "text-primary-blackPetrol",
-    dark: "text-neutral-white",
+    light: "text-primary-blackPetrol text-[16px] font-semibold leading-6",
+    dark: "text-neutral-white text-[16px] font-semibold leading-6",
   },
   h3_Default: {
-    light: "text-primary-blackPetrol",
-    dark: "text-neutral-white",
+    light: "text-primary-blackPetrol text-[16px] font-semibold leading-6",
+    dark: "text-neutral-white text-[16px] font-semibold leading-6",
   },
   h4_Default: {
-    light: "",
+    light: "text-[12px] font-semibold leading-4",
     dark: "",
   },
 };
@@ -51,7 +51,9 @@ const Heading: FC<HeadingProps> = ({
   const textStyle = textStyles[type][mode];
 
   return (
-    <p className={`${textStyle} text-${type} font-montserrat ${className}`}>
+    <p
+      className={`${textStyle} text-${type} font-montserrat tracking-tighter ${className}`}
+    >
       {children}
     </p>
   );
