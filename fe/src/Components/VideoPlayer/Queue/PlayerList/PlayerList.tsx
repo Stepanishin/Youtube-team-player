@@ -8,7 +8,7 @@ import {
   StarSolidIcon,
   VolumeAnimatedIcon,
 } from "../../../../assets/svg/svg";
-import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
+import { FavoriteContext } from "@/context/FavoriteContext/FavoriteContext";
 import { UserContext } from "../../../../context/UserContext/UserContext";
 
 const PlayerList: FC<any> = ({
@@ -26,7 +26,7 @@ const PlayerList: FC<any> = ({
     );
   }
 
-  const { favoriteUserList, setFavoriteUserList } = favoriteContext;
+  const { favoriteUserList } = favoriteContext;
   const { user, role } = userContext;
 
   const isVideoFavorite = (video: VideoItem) => {

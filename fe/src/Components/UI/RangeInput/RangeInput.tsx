@@ -21,7 +21,7 @@ const RangeInput: React.FC<any> = ({ volume, handleVolumeChange }) => {
             ...props.style,
             height: "36px",
             display: "flex",
-            width: "100%",
+            width: "100px",
           }}
         >
           <div

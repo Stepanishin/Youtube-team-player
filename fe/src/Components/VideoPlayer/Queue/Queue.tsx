@@ -35,7 +35,7 @@ const Queue: FC<any> = ({
     <div
       className={`${
         mode === "dark" ? "bg-background-bgDark100" : "bg-background-bgLight200"
-      } p-6 md:p-8 flex flex-col justify-center`}
+      } p-6 md:p-8 flex flex-col`}
     >
       <div className="flex flex-col md:flex-row items-center gap-4 md:items-start">
         {currentVideo && (
@@ -84,6 +84,8 @@ const Queue: FC<any> = ({
             handlePlayPause={handlePlayPause}
             isPlaying={isPlaying}
             shuffleVideoListHandler={shuffleVideoListHandler}
+            toggleFavorite={toggleFavorite}
+            currentVideo={videoQueue[0]}
           />
         </div>
       </div>
