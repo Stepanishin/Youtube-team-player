@@ -1,15 +1,18 @@
 import React, { FC, useContext, useRef } from "react";
-import "./PlayerList.css";
 import { VideoItem } from "../../../../utils/types/video-item.type";
 import {
   DeleteIcon,
   DragAndDropIcon,
   StarEmptyIcon,
   StarSolidIcon,
-  VolumeAnimatedIcon,
 } from "../../../../assets/svg/svg";
 import { FavoriteContext } from "@/context/FavoriteContext/FavoriteContext";
 import { UserContext } from "../../../../context/UserContext/UserContext";
+import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
+import Heading from "@/Components/UI/Heading/Heading";
+import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
+import { ThemeContext } from "@/context/ThemeContext/ThemeContext";
+import Paragraph from "@/Components/UI/Paragraph/Paragraph";
 
 const PlayerList: FC<any> = ({
   videoQueue,
@@ -19,6 +22,8 @@ const PlayerList: FC<any> = ({
 }) => {
   const favoriteContext = useContext(FavoriteContext);
   const userContext = useContext(UserContext);
+
+  const { mode } = useContext(ThemeContext);
 
   if (!favoriteContext || !userContext) {
     throw new Error(
@@ -102,49 +107,86 @@ const PlayerList: FC<any> = ({
         <div className="queue">
           {videoQueue.map((video: VideoItem, index: any) => (
             <div
-              className="video__container"
+              className={`flex flex-col md:flex-row gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
+                videoQueue.length - 1 !== index
+                  ? "border-b border-accent-gray300"
+                  : ""
+              }`}
               key={video.id}
               onDragEnter={(e) => handleDragEnter(e, index)}
               onDragEnd={handleDragEnd}
             >
-              {index === 0 && <VolumeAnimatedIcon />}
-              {user && role === "admin" && index !== 0 && (
-                <span
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, index)}
-                  style={{ cursor: "grab" }}
-                >
-                  <DragAndDropIcon />
-                </span>
-              )}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  {user && role === "admin" && (
+                    <span
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      style={{ cursor: "grab" }}
+                    >
+                      <DragAndDropIcon />
+                    </span>
+                  )}
+                  {video.title && (
+                    <Heading type={HeadingTypeEnum.h2_Small}>
+                      {video.title}
+                    </Heading>
+                  )}
+                </div>
+                <div className="flex flex-col md:flex-row gap-1 md:gap-3 md:items-center">
+                  <Paragraph
+                    type={ParagraphTypeEnum.p1_Small}
+                    className="video__container_duration"
+                  >
+                    Length: {video.duration}
+                  </Paragraph>
+                  <div
+                    className={`${
+                      mode === "dark"
+                        ? "bg-neutral-white"
+                        : "bg-primary-blackPetrol"
+                    } hidden md:block w-2 h-2  rounded-full`}
+                  ></div>
+                  {video.added ? (
+                    <Paragraph
+                      type={ParagraphTypeEnum.p1_Small}
+                      className="video__added"
+                    >
+                      Added by {video.added}
+                    </Paragraph>
+                  ) : (
+                    <Paragraph
+                      type={ParagraphTypeEnum.p1_Small}
+                      className="video__added"
+                    >
+                      Added by Anonymous
+                    </Paragraph>
+                  )}
+                </div>
+              </div>
+              <div className="flex gap-4">
+                {user && (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => toggleFavorite(video)}
+                  >
+                    {isVideoFavorite(video) ? (
+                      <StarSolidIcon />
+                    ) : (
+                      <StarEmptyIcon />
+                    )}
+                  </span>
+                )}
 
-              {video.title && (
-                <p style={{ marginLeft: "10px" }}>
-                  {index + 1}: {video.title}
-                </p>
-              )}
-
-              <p className="video__container_duration">{video.duration}</p>
-              {user && role === "admin" && (
-                <span
-                  style={{ marginLeft: "5px", cursor: "pointer" }}
-                  onClick={() => removeVideoFromQueue(video.id)}
-                >
-                  <DeleteIcon />
-                </span>
-              )}
-
-              <span
-                style={{ marginLeft: "5px", cursor: "pointer" }}
-                onClick={() => toggleFavorite(video)}
-              >
-                {isVideoFavorite(video) ? <StarSolidIcon /> : <StarEmptyIcon />}
-              </span>
-              {video.added ? (
-                <p className="video__added">Added by {video.added}</p>
-              ) : (
-                <p className="video__added">Added by Anonymous</p>
-              )}
+                {user && role === "admin" && (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => removeVideoFromQueue(video.id)}
+                  >
+                    <DeleteIcon />
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>

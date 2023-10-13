@@ -82,7 +82,6 @@ const VideoPlayer = () => {
         socketRef.current.emit("removeVideoBySwitching", videoIdToRemove);
       }
     }
-    console.log("videoQueue", videoQueue);
   };
 
   const opts: YouTubeProps["opts"] = {

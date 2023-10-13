@@ -37,7 +37,7 @@ const Queue: FC<any> = ({
         mode === "dark" ? "bg-background-bgDark100" : "bg-background-bgLight200"
       } p-6 md:p-8 flex flex-col`}
     >
-      <div className="flex flex-col md:flex-row items-center gap-4 md:items-start">
+      <div className="flex flex-col md:flex-row items-start gap-4 md:items-start">
         {currentVideo && (
           <div className="w-[224px] md:w-[280px]">
             <YouTube
@@ -91,7 +91,7 @@ const Queue: FC<any> = ({
       </div>
 
       <PlayerList
-        videoQueue={videoQueue}
+        videoQueue={videoQueue.slice(1)}
         removeVideoFromQueue={removeVideoFromQueue}
         toggleFavorite={toggleFavorite}
         updateVideoQueue={updateVideoQueue}

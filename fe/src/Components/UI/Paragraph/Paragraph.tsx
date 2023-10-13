@@ -15,13 +15,14 @@ interface ParagraphProps {
 
 const textStyles = {
   p1_Large: {
-    light: "text-[16px] font-normal leading-6",
-    dark: "text-[16px] font-normal leading-6",
+    light:
+      "text-accent-gray400 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
+    dark: "text-accent-gray100 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
   },
   p1_Small: {
     light:
-      "text-accent-gray400 font-nunitoSans text-[14px] font-normal leading-5",
-    dark: "text-accent-gray100 font-nunitoSans text-[14px] font-normal leading-5",
+      "text-accent-gray400 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
+    dark: "text-accent-gray100 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
   },
   p2_Default: {
     light: " font-nunitoSans text-[14px] font-normal leading-5",

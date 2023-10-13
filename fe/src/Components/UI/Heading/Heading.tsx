@@ -16,20 +16,24 @@ interface HeadingProps {
 
 const textStyles = {
   h1_Large: {
-    light: "text-primary-blackPetrol text-[24px] font-bold leading-8",
-    dark: "text-neutral-white text-[24px] font-bold leading-8",
+    light:
+      "text-primary-blackPetrol text-[20px] md:text-[24px] font-bold leading-7 md:leading-8",
+    dark: "text-neutral-white text-[20px] md:text-[24px] font-bold leading-7 md:leading-8",
   },
   h1_Small: {
-    light: "text-primary-blackPetrol text-[20px] font-bold leading-7",
-    dark: "text-neutral-white text-[20px] font-bold leading-7",
+    light:
+      "text-primary-blackPetrol text-[20px] md:text-[24px] font-bold leading-7 md:leading-8",
+    dark: "text-neutral-white text-[20px] md:text-[24px] font-bold leading-7 md:leading-8",
   },
   h2_Large: {
-    light: "text-primary-blackPetrol text-[20px] font-semibold leading-7",
-    dark: "text-neutral-white text-[20px] font-semibold leading-7",
+    light:
+      "text-primary-blackPetrol text-[16px] md:text-[20px] font-semibold leading-6 md:leading-7",
+    dark: "text-neutral-white text-[16px] md:text-[20px] font-semibold leading-6 md:leading-7",
   },
   h2_Small: {
-    light: "text-primary-blackPetrol text-[16px] font-semibold leading-6",
-    dark: "text-neutral-white text-[16px] font-semibold leading-6",
+    light:
+      "text-primary-blackPetrol text-[16px] md:text-[20px] font-semibold leading-6 md:leading-7",
+    dark: "text-neutral-white text-[16px] md:text-[20px] font-semibold leading-6 md:leading-7",
   },
   h3_Default: {
     light: "text-primary-blackPetrol text-[16px] font-semibold leading-6",
