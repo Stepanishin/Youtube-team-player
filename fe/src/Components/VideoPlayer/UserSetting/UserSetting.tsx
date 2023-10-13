@@ -40,7 +40,7 @@ const UserSetting: FC<UserSettingProps> = ({
   );
 
   return (
-    <div className="VideoPlayer__wrapper right-side">
+    <div className="VideoPlayer__wrapper right-side xl:max-w-[557px]">
       <div className="tabs">
         {TAB_CONFIG.map((tab) => (
           <button

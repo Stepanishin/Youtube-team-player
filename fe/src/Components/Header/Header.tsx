@@ -8,6 +8,9 @@ import { FavoriteContext } from "../../context/FavoriteContext/FavoriteContext";
 import { ThemeContext } from "../../context/ThemeContext/ThemeContext";
 import Logo from "../UI/Logo/Logo";
 import DefaultButton from "../UI/DefaultButton/DefaultButton";
+import Heading from "../UI/Heading/Heading";
+import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
+import useMediaQuery from "@/utils/hooks/useMediaQuery";
 
 const Header = () => {
   const userContext = useContext(UserContext);
@@ -65,15 +68,7 @@ const Header = () => {
           <div className="flex items-center gap-4">
             <img className="w-9 h-9 rounded-full" src={picture} alt="avatar" />
             <div className="flex flex-col items-start">
-              <h4
-                className={`${
-                  mode === "dark"
-                    ? "text-neutral-white"
-                    : "text-primary-blackPetrol"
-                } text-h4_Default font-montserrat`}
-              >
-                {user}
-              </h4>
+              <Heading type={HeadingTypeEnum.h3_Default}>{user}</Heading>
               <button
                 className={`${
                   mode === "dark"

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { YouTubeProps } from "react-youtube";
-import "./VideoPlayer.css";
 import socketIOClient, { Socket } from "socket.io-client";
 import Queue from "./Queue/Queue";
 import UserSetting from "./UserSetting/UserSetting";
@@ -87,8 +86,8 @@ const VideoPlayer = () => {
   };
 
   const opts: YouTubeProps["opts"] = {
-    height: "120px",
-    width: "200px",
+    height: "100%",
+    width: "100%",
     playerVars: {
       autoplay: 1,
     },
@@ -221,7 +220,7 @@ const VideoPlayer = () => {
   };
 
   return (
-    <div className="video-container">
+    <div className="flex flex-col xl:flex-row justify-center p-6 sm:p-8 gap-6 sm:gap-8">
       <Queue
         currentVideo={currentVideo}
         opts={opts}

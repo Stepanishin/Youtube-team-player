@@ -1,4 +1,4 @@
-.playerController {
+/* .playerController {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -6,7 +6,7 @@
   width: fit-content;
   padding: 5px;
   border-radius: 5px;
-}
+} */
 
 .range-input {
   -webkit-appearance: none;

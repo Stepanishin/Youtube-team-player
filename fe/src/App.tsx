@@ -13,10 +13,8 @@ function App() {
         <UserProvider>
           <FavoriteProvider>
             <ThemeProvider>
-              {/* <div className="container"> */}
               <Header />
               <VideoPlayer />
-              {/* </div> */}
             </ThemeProvider>
           </FavoriteProvider>
         </UserProvider>
