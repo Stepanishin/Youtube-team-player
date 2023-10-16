@@ -13,6 +13,8 @@ import DefaultButton from "../../../UI/DefaultButton/DefaultButton";
 import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
 import Paragraph from "@/Components/UI/Paragraph/Paragraph";
 import SearchInput from "@/Components/UI/SearchInput/SearchInput";
+import Heading from "@/Components/UI/Heading/Heading";
+import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -107,12 +109,29 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
             />
             <DefaultButton>SEARCH</DefaultButton>
           </form>
-          <div className="results-container">
-            {results.map((result) => (
-              <div key={result.id} className="result-item">
-                <div className="result__icon-wrapper">
+          <div>
+            {results.map((result, index) => (
+              <div
+                key={result.id}
+                className={`flex flex-col-reverse md:flex-row-reverse gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
+                  results.length - 1 !== index
+                    ? "border-b border-accent-gray300"
+                    : ""
+                }`}
+              >
+                <div className="flex gap-4 items-center">
                   <span
-                    className="result-button"
+                    className="cursor-pointer"
+                    onClick={() => toggleFavorite(result)}
+                  >
+                    {isVideoFavorite(result) ? (
+                      <StarSolidIcon />
+                    ) : (
+                      <StarEmptyIcon />
+                    )}
+                  </span>
+                  <span
+                    className="cursor-pointer"
                     onClick={() =>
                       onVideoSelect({
                         id: result.id,
@@ -124,24 +143,21 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
                   >
                     <AddIcon />
                   </span>
-                  <span
-                    style={{ marginLeft: "5px", cursor: "pointer" }}
-                    onClick={() => toggleFavorite(result)}
-                  >
-                    {isVideoFavorite(result) ? (
-                      <StarSolidIcon />
-                    ) : (
-                      <StarEmptyIcon />
-                    )}
-                  </span>
                 </div>
 
-                <p className="result-title">
-                  {result.title.length > 50
-                    ? result.title.slice(0, 40) + "..."
-                    : result.title}
-                </p>
-                <p className="result-duration">{result.duration}</p>
+                <div>
+                  <Heading type={HeadingTypeEnum.h3_Default}>
+                    {result.title.length > 50
+                      ? result.title.slice(0, 40) + "..."
+                      : result.title}
+                  </Heading>
+                  <Paragraph
+                    type={ParagraphTypeEnum.p2_Default}
+                    className="result-duration"
+                  >
+                    Length: {result.duration}
+                  </Paragraph>
+                </div>
               </div>
             ))}
           </div>

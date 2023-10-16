@@ -1,5 +1,4 @@
 import React, { FC, useContext, useEffect } from "react";
-import "./FavoritePlayList.css";
 import { UserContext } from "../../../../context/UserContext/UserContext";
 import axios from "axios";
 import {
@@ -9,6 +8,11 @@ import {
 } from "../../../../assets/svg/svg";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
 import { VideoItem } from "../../../../utils/types/video-item.type";
+import Paragraph from "@/Components/UI/Paragraph/Paragraph";
+import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
+import Heading from "@/Components/UI/Heading/Heading";
+import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
+import DefaultButton from "@/Components/UI/DefaultButton/DefaultButton";
 
 const FavoritePlayList: FC<any> = ({
   toggleFavorite,
@@ -69,19 +73,26 @@ const FavoritePlayList: FC<any> = ({
   };
 
   return (
-    <div className="FavoritePlayList__container">
+    <div className="p-6 md:p-8 flex gap-2 flex-col">
       {favoriteUserList && user && (
-        <button className="button" onClick={addAllFavorite}>
-          Add all to queue
-        </button>
+        <DefaultButton onClick={addAllFavorite}>
+          {"Add all to queue".toLocaleUpperCase()}
+        </DefaultButton>
       )}
       <div className="FavoritePlayList__results-container">
         {favoriteUserList &&
-          favoriteUserList.map((video) => (
-            <div key={video.id + "favorite"} className="result-item">
-              <div className="result__icon-wrapper">
+          favoriteUserList.map((video, index) => (
+            <div
+              key={video.id + "favorite"}
+              className={`flex flex-col-reverse md:flex-row-reverse gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
+                favoriteUserList.length - 1 !== index
+                  ? "border-b border-accent-gray300"
+                  : ""
+              }`}
+            >
+              <div className="flex gap-4 items-center flex-row-reverse">
                 <span
-                  className="result-button"
+                  className="cursor-pointer"
                   onClick={() =>
                     onVideoSelect({
                       id: video.id,
@@ -105,12 +116,19 @@ const FavoritePlayList: FC<any> = ({
                 </span>
               </div>
 
-              <p className="result-title">
-                {video.title.length > 50
-                  ? video.title.slice(0, 40) + "..."
-                  : video.title}
-              </p>
-              <p className="result-duration">{video.duration}</p>
+              <div>
+                <Heading type={HeadingTypeEnum.h3_Default}>
+                  {video.title.length > 50
+                    ? video.title.slice(0, 40) + "..."
+                    : video.title}
+                </Heading>
+                <Paragraph
+                  type={ParagraphTypeEnum.p2_Default}
+                  className="result-duration"
+                >
+                  Length: {video.duration}
+                </Paragraph>
+              </div>
             </div>
           ))}
       </div>

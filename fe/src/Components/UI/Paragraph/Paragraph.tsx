@@ -25,8 +25,9 @@ const textStyles = {
     dark: "text-accent-gray100 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
   },
   p2_Default: {
-    light: " font-nunitoSans text-[14px] font-normal leading-5",
-    dark: " font-nunitoSans text-[14px] font-normal leading-5",
+    light:
+      "text-accent-gray400 font-nunitoSans text-[14px] font-normal leading-5",
+    dark: "text-accent-gray200 font-nunitoSans text-[14px] font-normal leading-5",
   },
   p3_Default: {
     light:
