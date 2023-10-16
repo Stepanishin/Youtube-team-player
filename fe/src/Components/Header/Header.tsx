@@ -74,7 +74,7 @@ const Header = () => {
                   mode === "dark"
                     ? "text-accent-gray200"
                     : "text-accent-gray400"
-                } font-nunitoSans text-p3_Default`}
+                } font-nunitoSans text-[12px] font-normal leading-4`}
                 onClick={() => googleLogin()}
               >
                 Log out

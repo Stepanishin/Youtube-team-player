@@ -98,100 +98,94 @@ const PlayerList: FC<any> = ({
   };
 
   return (
-    <>
-      <div
-        style={{
-          marginTop: "20px",
-        }}
-      >
-        <div className="queue">
-          {videoQueue.map((video: VideoItem, index: any) => (
-            <div
-              className={`flex flex-col md:flex-row gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
-                videoQueue.length - 1 !== index
-                  ? "border-b border-accent-gray300"
-                  : ""
-              }`}
-              key={video.id}
-              onDragEnter={(e) => handleDragEnter(e, index)}
-              onDragEnd={handleDragEnd}
-            >
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  {user && role === "admin" && (
-                    <span
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, index)}
-                      style={{ cursor: "grab" }}
-                    >
-                      <DragAndDropIcon />
-                    </span>
-                  )}
-                  {video.title && (
-                    <Heading type={HeadingTypeEnum.h2_Small}>
-                      {video.title}
-                    </Heading>
-                  )}
-                </div>
-                <div className="flex flex-col md:flex-row gap-1 md:gap-3 md:items-center">
-                  <Paragraph
-                    type={ParagraphTypeEnum.p1_Small}
-                    className="video__container_duration"
-                  >
-                    Length: {video.duration}
-                  </Paragraph>
-                  <div
-                    className={`${
-                      mode === "dark"
-                        ? "bg-neutral-white"
-                        : "bg-primary-blackPetrol"
-                    } hidden md:block w-2 h-2  rounded-full`}
-                  ></div>
-                  {video.added ? (
-                    <Paragraph
-                      type={ParagraphTypeEnum.p1_Small}
-                      className="video__added"
-                    >
-                      Added by {video.added}
-                    </Paragraph>
-                  ) : (
-                    <Paragraph
-                      type={ParagraphTypeEnum.p1_Small}
-                      className="video__added"
-                    >
-                      Added by Anonymous
-                    </Paragraph>
-                  )}
-                </div>
-              </div>
-              <div className="flex gap-4">
-                {user && (
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => toggleFavorite(video)}
-                  >
-                    {isVideoFavorite(video) ? (
-                      <StarSolidIcon />
-                    ) : (
-                      <StarEmptyIcon />
-                    )}
-                  </span>
-                )}
-
+    <div>
+      <div className="queue">
+        {videoQueue.map((video: VideoItem, index: any) => (
+          <div
+            className={`flex flex-col md:flex-row gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
+              videoQueue.length - 1 !== index
+                ? "border-b border-accent-gray300"
+                : ""
+            }`}
+            key={video.id}
+            onDragEnter={(e) => handleDragEnter(e, index)}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
                 {user && role === "admin" && (
                   <span
-                    className="cursor-pointer"
-                    onClick={() => removeVideoFromQueue(video.id)}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    style={{ cursor: "grab" }}
                   >
-                    <DeleteIcon />
+                    <DragAndDropIcon />
                   </span>
+                )}
+                {video.title && (
+                  <Heading type={HeadingTypeEnum.h2_Small}>
+                    {video.title}
+                  </Heading>
+                )}
+              </div>
+              <div className="flex flex-col md:flex-row gap-1 md:gap-3 md:items-center">
+                <Paragraph
+                  type={ParagraphTypeEnum.p1_Small}
+                  className="video__container_duration"
+                >
+                  Length: {video.duration}
+                </Paragraph>
+                <div
+                  className={`${
+                    mode === "dark"
+                      ? "bg-neutral-white"
+                      : "bg-primary-blackPetrol"
+                  } hidden md:block w-2 h-2  rounded-full`}
+                ></div>
+                {video.added ? (
+                  <Paragraph
+                    type={ParagraphTypeEnum.p1_Small}
+                    className="video__added"
+                  >
+                    Added by {video.added}
+                  </Paragraph>
+                ) : (
+                  <Paragraph
+                    type={ParagraphTypeEnum.p1_Small}
+                    className="video__added"
+                  >
+                    Added by Anonymous
+                  </Paragraph>
                 )}
               </div>
             </div>
-          ))}
-        </div>
+            <div className="flex gap-4">
+              {user && (
+                <span
+                  className="cursor-pointer"
+                  onClick={() => toggleFavorite(video)}
+                >
+                  {isVideoFavorite(video) ? (
+                    <StarSolidIcon />
+                  ) : (
+                    <StarEmptyIcon />
+                  )}
+                </span>
+              )}
+
+              {user && role === "admin" && (
+                <span
+                  className="cursor-pointer"
+                  onClick={() => removeVideoFromQueue(video.id)}
+                >
+                  <DeleteIcon />
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

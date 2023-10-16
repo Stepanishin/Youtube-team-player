@@ -58,12 +58,12 @@ let DEFAULT_VIDEOS = [
     duration: "3:29",
     added: "default",
   },
-  // {
-  //   id: "Bag1gUxuU0g",
-  //   title: "Lana Del Rey - Born To Die",
-  //   duration: "4:46",
-  //   added: "default",
-  // },
+  {
+    id: "Bag1gUxuU0g",
+    title: "Lana Del Rey - Born To Die",
+    duration: "4:46",
+    added: "default",
+  },
   {
     id: "o_1aF54DO60",
     title: "Lana Del Rey - Young and Beautiful",

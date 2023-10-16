@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useState } from "react";
-import "./YouTubeSearch.css";
 import { formatDuration } from "../../../../utils/helpers/formatDuration";
 import { VideoItem } from "../../../../utils/types/video-item.type";
 import toast, { Toaster } from "react-hot-toast";
@@ -11,6 +10,11 @@ import {
 import { UserContext } from "../../../../context/UserContext/UserContext";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
 import DefaultButton from "../../../UI/DefaultButton/DefaultButton";
+import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
+import Paragraph from "@/Components/UI/Paragraph/Paragraph";
+import SearchInput from "@/Components/UI/SearchInput/SearchInput";
+import Heading from "@/Components/UI/Heading/Heading";
+import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -94,24 +98,40 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
   };
 
   return (
-    <div className="search-container">
+    <div className="p-6 md:p-8 flex gap-2 flex-col">
       {user ? (
         <>
-          <form onSubmit={searchYouTube}>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleChange}
-              className="search-input"
+          <form onSubmit={searchYouTube} className="flex gap-2 flex-col">
+            <SearchInput
+              searchTerm={searchTerm}
+              handleChange={handleChange}
+              placeholder={"Search music ..."}
             />
             <DefaultButton>SEARCH</DefaultButton>
           </form>
-          <div className="results-container">
-            {results.map((result) => (
-              <div key={result.id} className="result-item">
-                <div className="result__icon-wrapper">
+          <div>
+            {results.map((result, index) => (
+              <div
+                key={result.id}
+                className={`flex flex-col-reverse md:flex-row-reverse gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
+                  results.length - 1 !== index
+                    ? "border-b border-accent-gray300"
+                    : ""
+                }`}
+              >
+                <div className="flex gap-4 items-center">
                   <span
-                    className="result-button"
+                    className="cursor-pointer"
+                    onClick={() => toggleFavorite(result)}
+                  >
+                    {isVideoFavorite(result) ? (
+                      <StarSolidIcon />
+                    ) : (
+                      <StarEmptyIcon />
+                    )}
+                  </span>
+                  <span
+                    className="cursor-pointer"
                     onClick={() =>
                       onVideoSelect({
                         id: result.id,
@@ -123,30 +143,29 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
                   >
                     <AddIcon />
                   </span>
-                  <span
-                    style={{ marginLeft: "5px", cursor: "pointer" }}
-                    onClick={() => toggleFavorite(result)}
-                  >
-                    {isVideoFavorite(result) ? (
-                      <StarSolidIcon />
-                    ) : (
-                      <StarEmptyIcon />
-                    )}
-                  </span>
                 </div>
 
-                <p className="result-title">
-                  {result.title.length > 50
-                    ? result.title.slice(0, 40) + "..."
-                    : result.title}
-                </p>
-                <p className="result-duration">{result.duration}</p>
+                <div>
+                  <Heading type={HeadingTypeEnum.h3_Default}>
+                    {result.title.length > 50
+                      ? result.title.slice(0, 40) + "..."
+                      : result.title}
+                  </Heading>
+                  <Paragraph
+                    type={ParagraphTypeEnum.p2_Default}
+                    className="result-duration"
+                  >
+                    Length: {result.duration}
+                  </Paragraph>
+                </div>
               </div>
             ))}
           </div>
         </>
       ) : (
-        <div style={{ marginTop: "20px  " }}>You must log in</div>
+        <Paragraph type={ParagraphTypeEnum.p1_Small}>
+          Log in to access all the features.
+        </Paragraph>
       )}
 
       <Toaster position="top-right" reverseOrder={false} />

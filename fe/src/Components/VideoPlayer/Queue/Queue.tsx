@@ -37,9 +37,9 @@ const Queue: FC<any> = ({
         mode === "dark"
           ? "bg-background-bgDark100"
           : "bg-background-bgLight200 border-solid border-accent-gray200 border"
-      } p-6 md:p-8 flex flex-col rounded-md w-full`}
+      } p-6 md:p-8 flex flex-col rounded-md w-full scrollbar-none max-h-[1000px] md:max-h-[750px] xl:max-h-none xl:h-[calc(100vh-140px)]  xl:min-h-[1000px] overflow-y-scroll`}
     >
-      <div className="flex flex-col md:flex-row items-start gap-4 md:items-start">
+      <div className="flex flex-col md:flex-row items-start gap-4 md:items-start md:gap-9">
         {currentVideo && (
           <div className="w-[224px] md:w-[280px]">
             <YouTube

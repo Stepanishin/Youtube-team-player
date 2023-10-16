@@ -218,7 +218,7 @@ const VideoPlayer = () => {
   };
 
   return (
-    <div className="flex flex-col xl:flex-row justify-center p-6 sm:p-8 gap-6 sm:gap-8">
+    <div className="flex flex-col xl:flex-row justify-center p-6 sm:p-8 gap-6 sm:gap-8 scrollbar-none">
       <Queue
         currentVideo={currentVideo}
         opts={opts}
