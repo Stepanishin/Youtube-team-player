@@ -177,6 +177,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
   purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
 };

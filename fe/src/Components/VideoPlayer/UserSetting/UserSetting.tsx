@@ -83,7 +83,7 @@ const UserSetting: FC<UserSettingProps> = ({
           : "bg-background-bgLight200 border-solid border-accent-gray200 border"
       } rounded-md xl:min-w-[384px] 2xl:min-w-[557px]`}
     >
-      <div className="flex overflow-auto">
+      <div className="flex overflow-auto scrollbar-none">
         {TAB_CONFIG.map((tab) => {
           if (
             (!tab.isUser && !tab.isAdmin) ||
