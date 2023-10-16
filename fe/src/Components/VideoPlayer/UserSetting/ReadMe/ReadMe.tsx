@@ -17,14 +17,12 @@ const ReadMe = () => {
         </li>
         <li>
           <Paragraph type={ParagraphTypeEnum.p1_Small}>
-            {" "}
             Videoposnetke, ki so vam všeč, dodajte na seznam priljubljenih, saj
             je število iskalnih klikov v YouTubu omejeno
           </Paragraph>
         </li>
         <li>
           <Paragraph type={ParagraphTypeEnum.p1_Small}>
-            {" "}
             Videoposnetka ne previjajte naprej ali nazaj, kajti če videoposnetek
             previjete do konca, se bo video preklopil za vse uporabnike
             spletnega mesta. Obravnavajte ga kot radio in poslušajte tudi videe
@@ -33,7 +31,6 @@ const ReadMe = () => {
         </li>
         <li>
           <Paragraph type={ParagraphTypeEnum.p1_Small}>
-            {" "}
             Če najdete kakršne koli napake ali želite nekaj popraviti ali želite
             nekaj dodati ali spremeniti - pišite mi
           </Paragraph>
