@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useState } from "react";
-import "./YouTubeSearch.css";
 import { formatDuration } from "../../../../utils/helpers/formatDuration";
 import { VideoItem } from "../../../../utils/types/video-item.type";
 import toast, { Toaster } from "react-hot-toast";
@@ -11,6 +10,9 @@ import {
 import { UserContext } from "../../../../context/UserContext/UserContext";
 import { FavoriteContext } from "../../../../context/FavoriteContext/FavoriteContext";
 import DefaultButton from "../../../UI/DefaultButton/DefaultButton";
+import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
+import Paragraph from "@/Components/UI/Paragraph/Paragraph";
+import SearchInput from "@/Components/UI/SearchInput/SearchInput";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -94,15 +96,14 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
   };
 
   return (
-    <div className="search-container">
+    <div className="p-6 md:p-8 flex gap-2 flex-col">
       {user ? (
         <>
-          <form onSubmit={searchYouTube}>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleChange}
-              className="search-input"
+          <form onSubmit={searchYouTube} className="flex gap-2 flex-col">
+            <SearchInput
+              searchTerm={searchTerm}
+              handleChange={handleChange}
+              placeholder={"Search music ..."}
             />
             <DefaultButton>SEARCH</DefaultButton>
           </form>
@@ -146,7 +147,9 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
           </div>
         </>
       ) : (
-        <div style={{ marginTop: "20px  " }}>You must log in</div>
+        <Paragraph type={ParagraphTypeEnum.p1_Small}>
+          Log in to access all the features.
+        </Paragraph>
       )}
 
       <Toaster position="top-right" reverseOrder={false} />

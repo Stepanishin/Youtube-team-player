@@ -177,6 +177,6 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
   purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
 };

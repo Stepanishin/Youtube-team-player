@@ -16,8 +16,8 @@ interface ParagraphProps {
 const textStyles = {
   p1_Large: {
     light:
-      "text-accent-gray400 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
-    dark: "text-accent-gray100 font-nunitoSans text-[14px] md:text-[16px] font-normal leading-5 md:leading-6",
+      "text-accent-gray400 font-nunitoSans text-[16px] font-normal leading-6",
+    dark: "text-accent-gray100 font-nunitoSans text-[16px] font-normal leading-6",
   },
   p1_Small: {
     light:

@@ -24,7 +24,6 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   background-color: #111;
-  /* color: #bbb; */
 }
 
 a {
@@ -54,49 +53,3 @@ video {
   display: inline-block;
   animation: pulse 1s infinite;
 }
-
-/* .button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: rgb(13 148 136);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: fit-content;
-}
-
-.button:hover {
-  background-color: rgb(20 184 166);
-}
-
-.theme {
-  transition: 1s all ease;
-  width: 100%;
-  height: 100%;
-} */
-
-/* .container {
-  max-width: 1366px;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 0 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-} */
-
-/* .dark svg {
-  fill: aliceblue !important;
-}
-
-.light svg {
-  fill: #111 !important;
-} */
-
-/* @media (max-width: 768px) {
-  .container {
-    padding: 0 10px;
-  }
-} */
