@@ -115,17 +115,6 @@ io.on("connection", (socket) => {
 
     userQueue.push(video);
 
-    // Добавление видео в DEFAULT_VIDEOS, если его там нет
-    // if (!DEFAULT_VIDEOS.some((v) => v.id === video.id)) {
-    //   DEFAULT_VIDEOS.push(video);
-    // }
-
-    // if (userQueue.length > 0) {
-    //   io.emit("updateQueue", [...userQueue]);
-    // } else {
-    //   io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-    // }
-
     // Рассылка обновленной очереди всем подключенным пользователям
     io.emit("updateQueue", [...userQueue]);
 
