@@ -155,12 +155,25 @@ io.on("connection", (socket) => {
 
   // Обработчик события удаления видео из очереди после его окончания
   socket.on("removeVideoBySwitching", (video) => {
-    console.log("removeVideoBySwitching", video);
-    console.log("userQueue1", userQueue);
+    if (!RECENTLY_PLAYED.some((v) => v.id === video.id)) {
+      RECENTLY_PLAYED.push(video);
+    }
+
     userQueue = userQueue.filter((v) => {
       return v.id !== video.id;
     });
-    console.log("userQueue2", userQueue);
+
+    // если в очереди остался всего один элемент, то добавляем в очеред все элементы из RECENTLY_PLAYED, кроме того что уже есть в очереди, предварительно перемешав RECENTLY_PLAYED
+    if (userQueue.length === 1) {
+      const recentlyPlayedWithoutCurrent = RECENTLY_PLAYED.filter(
+        (v) => v.id !== userQueue[0].id
+      );
+      const shuffledRecentlyPlayedWithoutCurrent = shuffleArray(
+        recentlyPlayedWithoutCurrent
+      );
+      userQueue = [...userQueue, ...shuffledRecentlyPlayedWithoutCurrent];
+      RECENTLY_PLAYED = [];
+    }
 
     // Переход к проигрыванию DEFAULT_VIDEOS, если userQueue пуст
     // if (userQueue.length === 0) {
