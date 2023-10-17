@@ -103,12 +103,6 @@ io.on("connection", (socket) => {
   connectedUsers++;
   io.emit("getUsersCount", connectedUsers);
 
-  // if (userQueue.length > 1) {
-  //   socket.emit("updateQueue", [...userQueue]);
-  // } else {
-  //   socket.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-  // }
-
   // Sending the current queue to the newly connected user
   socket.emit("updateQueue", [...userQueue]);
 
@@ -141,13 +135,6 @@ io.on("connection", (socket) => {
   // Обработчик события удаления видео из очереди запущенного администратором
   socket.on("removeVideo", (video) => {
     userQueue = userQueue.filter((v) => v.id !== video.id);
-    // DEFAULT_VIDEOS = DEFAULT_VIDEOS.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
-
-    // if (userQueue.length > 1) {
-    //   io.emit("updateQueue", [...userQueue]);
-    // } else {
-    //   io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-    // }
 
     // Рассылка обновленной очереди всем подключенным пользователям
     io.emit("updateQueue", [...userQueue]);
@@ -174,17 +161,6 @@ io.on("connection", (socket) => {
       userQueue = [...userQueue, ...shuffledRecentlyPlayedWithoutCurrent];
       RECENTLY_PLAYED = [];
     }
-
-    // Переход к проигрыванию DEFAULT_VIDEOS, если userQueue пуст
-    // if (userQueue.length === 0) {
-    //   userQueue = [...DEFAULT_VIDEOS]; // Копируем DEFAULT_VIDEOS в userQueue
-    // }
-
-    // if (userQueue.length > 0) {
-    //   io.emit("updateQueue", [...userQueue]);
-    // } else {
-    //   io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-    // }
 
     // Рассылка обновленной очереди всем подключенным пользователям
     io.emit("updateQueue", [...userQueue]);
