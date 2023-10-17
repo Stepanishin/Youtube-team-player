@@ -72,6 +72,8 @@ let DEFAULT_VIDEOS = [
   },
 ];
 
+let RECENTLY_PLAYED = [];
+
 // return shuffled array
 function shuffleArray(array) {
   const shuffledArray = [...array];
@@ -101,11 +103,8 @@ io.on("connection", (socket) => {
   connectedUsers++;
   io.emit("getUsersCount", connectedUsers);
 
-  if (userQueue.length > 1) {
-    socket.emit("updateQueue", [...userQueue]);
-  } else {
-    socket.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-  }
+  // Sending the current queue to the newly connected user
+  socket.emit("updateQueue", [...userQueue]);
 
   socket.on("addVideo", (video) => {
     // Проверка на существование видео в очереди
@@ -117,44 +116,54 @@ io.on("connection", (socket) => {
     userQueue.push(video);
 
     // Добавление видео в DEFAULT_VIDEOS, если его там нет
-    if (!DEFAULT_VIDEOS.some((v) => v.id === video.id)) {
-      DEFAULT_VIDEOS.push(video);
-    }
+    // if (!DEFAULT_VIDEOS.some((v) => v.id === video.id)) {
+    //   DEFAULT_VIDEOS.push(video);
+    // }
 
-    if (userQueue.length > 0) {
-      io.emit("updateQueue", [...userQueue]);
-    } else {
-      io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-    }
+    // if (userQueue.length > 0) {
+    //   io.emit("updateQueue", [...userQueue]);
+    // } else {
+    //   io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
+    // }
+
+    // Рассылка обновленной очереди всем подключенным пользователям
+    io.emit("updateQueue", [...userQueue]);
+
     socket.emit("videoAdded");
   });
 
   // Обработчик события удаления видео из очереди запущенного администратором
-  socket.on("removeVideo", (videoId) => {
-    userQueue = userQueue.filter((v) => v.id !== videoId);
-    DEFAULT_VIDEOS = DEFAULT_VIDEOS.filter((v) => v.id !== videoId); // Удаляю нужное видео из дефолтной очереди
+  socket.on("removeVideo", (video) => {
+    userQueue = userQueue.filter((v) => v.id !== video.id);
 
-    if (userQueue.length > 1) {
-      io.emit("updateQueue", [...userQueue]);
-    } else {
-      io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
-    }
+    // Рассылка обновленной очереди всем подключенным пользователям
+    io.emit("updateQueue", [...userQueue]);
   });
 
   // Обработчик события удаления видео из очереди после его окончания
-  socket.on("removeVideoBySwitching", (videoId) => {
-    userQueue = userQueue.filter((v) => v.id !== videoId);
-
-    // Переход к проигрыванию DEFAULT_VIDEOS, если userQueue пуст
-    if (userQueue.length === 0) {
-      userQueue = [...DEFAULT_VIDEOS]; // Копируем DEFAULT_VIDEOS в userQueue
+  socket.on("removeVideoBySwitching", (video) => {
+    if (!RECENTLY_PLAYED.some((v) => v.id === video.id)) {
+      RECENTLY_PLAYED.push(video);
     }
 
-    if (userQueue.length > 0) {
-      io.emit("updateQueue", [...userQueue]);
-    } else {
-      io.emit("updateQueue", [...userQueue, ...DEFAULT_VIDEOS]);
+    userQueue = userQueue.filter((v) => {
+      return v.id !== video.id;
+    });
+
+    // если в очереди остался всего один элемент, то добавляем в очеред все элементы из RECENTLY_PLAYED, кроме того что уже есть в очереди, предварительно перемешав RECENTLY_PLAYED
+    if (userQueue.length === 1) {
+      const recentlyPlayedWithoutCurrent = RECENTLY_PLAYED.filter(
+        (v) => v.id !== userQueue[0].id
+      );
+      const shuffledRecentlyPlayedWithoutCurrent = shuffleArray(
+        recentlyPlayedWithoutCurrent
+      );
+      userQueue = [...userQueue, ...shuffledRecentlyPlayedWithoutCurrent];
+      RECENTLY_PLAYED = [];
     }
+
+    // Рассылка обновленной очереди всем подключенным пользователям
+    io.emit("updateQueue", [...userQueue]);
   });
 
   socket.on("togglePlayPause", (isPlaying) => {

@@ -80,15 +80,17 @@ const Queue: FC<any> = ({
               </div>
             </div>
           </div>
-          <PlayerController
-            volume={volume}
-            handleVolumeChange={handleVolumeChange}
-            handlePlayPause={handlePlayPause}
-            isPlaying={isPlaying}
-            shuffleVideoListHandler={shuffleVideoListHandler}
-            toggleFavorite={toggleFavorite}
-            currentVideo={videoQueue[0]}
-          />
+          {videoQueue.length > 0 && (
+            <PlayerController
+              volume={volume}
+              handleVolumeChange={handleVolumeChange}
+              handlePlayPause={handlePlayPause}
+              isPlaying={isPlaying}
+              shuffleVideoListHandler={shuffleVideoListHandler}
+              toggleFavorite={toggleFavorite}
+              currentVideo={videoQueue[0]}
+            />
+          )}
         </div>
       </div>
 
