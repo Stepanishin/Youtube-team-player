@@ -75,11 +75,11 @@ const VideoPlayer = () => {
     if (endTriggered) return;
     setEndTriggered(true);
 
-    const videoIdToRemove = currentVideo ? currentVideo.id : null;
+    const videoToRemove = currentVideo ? currentVideo : null;
 
-    if (videoIdToRemove && serverEndpoint) {
+    if (videoToRemove && serverEndpoint) {
       if (socketRef.current) {
-        socketRef.current.emit("removeVideoBySwitching", videoIdToRemove);
+        socketRef.current.emit("removeVideoBySwitching", videoToRemove);
       }
     }
   };
@@ -130,16 +130,16 @@ const VideoPlayer = () => {
     }
   }, [currentVideo]);
 
-  const removeVideoFromQueue = (videoId: string) => {
+  const removeVideoFromQueue = (deletedVideo: VideoItem) => {
     if (!serverEndpoint) {
       console.error("SERVER_ENDPOINT is not defined");
       return;
     }
     if (socketRef.current) {
-      socketRef.current.emit("removeVideo", videoId);
+      socketRef.current.emit("removeVideo", deletedVideo);
     }
 
-    setVideoQueue(videoQueue.filter((video) => video.id !== videoId));
+    setVideoQueue(videoQueue.filter((video) => video.id !== deletedVideo.id));
     toast.success("Video was deleted!");
   };
 

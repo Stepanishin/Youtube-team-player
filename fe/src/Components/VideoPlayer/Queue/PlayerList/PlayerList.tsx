@@ -176,7 +176,7 @@ const PlayerList: FC<any> = ({
               {user && role === "admin" && (
                 <span
                   className="cursor-pointer"
-                  onClick={() => removeVideoFromQueue(video.id)}
+                  onClick={() => removeVideoFromQueue(video)}
                 >
                   <DeleteIcon />
                 </span>
