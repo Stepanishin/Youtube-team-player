@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import YouTube, { YouTubeEvent } from "react-youtube";
+import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import PlayerController from "./PlayerController/PlayerController";
 import PlayerList from "./PlayerList/PlayerList";
 import { CurrentyPlaying } from "@/assets/svg/svg";
@@ -8,8 +8,26 @@ import Paragraph from "@/Components/UI/Paragraph/Paragraph";
 import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import Heading from "@/Components/UI/Heading/Heading";
+import { VideoItem } from "@/utils/types/video-item.type";
 
-const Queue: FC<any> = ({
+interface QueueProps {
+  currentVideo: VideoItem | null;
+  opts: YouTubeProps["opts"];
+  playerRef: any;
+  onEnd: () => void;
+  handleVolumeChange: (value: number) => void;
+  handlePlayPause: () => void;
+  isPlaying: boolean;
+  volume: number;
+  videoQueue: VideoItem[];
+  removeVideoFromQueue: (deletedVideo: VideoItem) => void;
+  toggleFavorite: (video: VideoItem) => void;
+  userCount: number;
+  shuffleVideoListHandler: () => void;
+  updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
+}
+
+const Queue: FC<QueueProps> = ({
   currentVideo,
   opts,
   playerRef,
@@ -21,13 +39,12 @@ const Queue: FC<any> = ({
   videoQueue,
   removeVideoFromQueue,
   toggleFavorite,
-  userCount,
   shuffleVideoListHandler,
   updateVideoQueue,
 }) => {
   const { mode } = useContext(ThemeContext);
 
-  const onReady = (event: YouTubeEvent<any>) => {
+  const onReady = (event: YouTubeEvent) => {
     event.target.setVolume(volume);
   };
 

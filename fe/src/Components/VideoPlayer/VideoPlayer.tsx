@@ -46,9 +46,9 @@ const VideoPlayer = () => {
     socketRef.current.on("setPlayPause", (isPlayingFromServer) => {
       setIsPlaying(isPlayingFromServer);
       if (isPlayingFromServer) {
-        playerRef.current.internalPlayer.playVideo();
+        playerRef.current?.internalPlayer.playVideo();
       } else {
-        playerRef.current.internalPlayer.pauseVideo();
+        playerRef.current?.internalPlayer.pauseVideo();
       }
     });
 
@@ -103,16 +103,23 @@ const VideoPlayer = () => {
     }
   };
 
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<{
+    internalPlayer: {
+      playVideo: () => void;
+      pauseVideo: () => void;
+      setVolume: (value: number) => void;
+      getPlayerState: () => Promise<number>;
+    };
+  } | null>(null);
 
   useEffect(() => {
     let videoStarted = false;
     if (playerRef.current && playerRef.current.internalPlayer) {
       playerRef.current.internalPlayer
         .getPlayerState()
-        .then((result: any) => {
+        .then((result) => {
           if (result === 3) {
-            playerRef.current.internalPlayer.playVideo();
+            playerRef?.current?.internalPlayer.playVideo();
           }
           if (result === 1) {
             videoStarted = true; // Видео начало воспроизводиться
@@ -121,7 +128,7 @@ const VideoPlayer = () => {
             onEnd();
           }
         })
-        .catch((error: any) => {
+        .catch((error) => {
           console.log("Error getting player state", error);
         });
     }

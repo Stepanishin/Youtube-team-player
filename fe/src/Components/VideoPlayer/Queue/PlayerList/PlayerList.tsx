@@ -14,7 +14,14 @@ import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import { ThemeContext } from "@/context/ThemeContext/ThemeContext";
 import Paragraph from "@/Components/UI/Paragraph/Paragraph";
 
-const PlayerList: FC<any> = ({
+interface PlayerListProps {
+  videoQueue: VideoItem[];
+  removeVideoFromQueue: (deletedVideo: VideoItem) => void;
+  toggleFavorite: (video: VideoItem) => void;
+  updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
+}
+
+const PlayerList: FC<PlayerListProps> = ({
   videoQueue,
   removeVideoFromQueue,
   toggleFavorite,
@@ -41,9 +48,12 @@ const PlayerList: FC<any> = ({
   };
 
   const dragItem = useRef<HTMLElement | null>(null);
-  const dragItemIndex = useRef(null);
+  const dragItemIndex = useRef<number | null>(null);
 
-  const handleDragStart = (e: any, index: any) => {
+  const handleDragStart = (
+    e: React.DragEvent<HTMLSpanElement>,
+    index: number
+  ) => {
     dragItem.current = e.currentTarget.closest(".video__container");
     dragItemIndex.current = index;
 
@@ -53,20 +63,23 @@ const PlayerList: FC<any> = ({
     }
   };
 
-  const handleDragEnter = (e: any, index: any) => {
+  const handleDragEnter = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
     if (dragItemIndex.current !== null && dragItemIndex.current !== index) {
       const updatedVideoQueue = [...videoQueue];
       const [removed] = updatedVideoQueue.splice(dragItemIndex.current ?? 0, 1);
       updatedVideoQueue.splice(index, 0, removed);
       dragItemIndex.current = index;
 
-      e.target.classList.add("drag-over");
+      (e.target as HTMLElement).classList.add("drag-over");
 
       updateVideoQueue(updatedVideoQueue, false);
     }
   };
 
-  const handleDragEnd = (e: any, index: any) => {
+  const handleDragEnd = () => {
     const updatedVideoQueue = [...videoQueue];
     const [removed] = updatedVideoQueue.splice(dragItemIndex.current ?? 0, 1);
     updatedVideoQueue.splice(dragItemIndex?.current!, 0, removed);
@@ -79,7 +92,7 @@ const PlayerList: FC<any> = ({
   return (
     <div>
       <div className="queue">
-        {videoQueue.map((video: VideoItem, index: any) => (
+        {videoQueue.map((video: VideoItem, index) => (
           <div
             className={`flex flex-col md:flex-row gap-4 md:items-center md:justify-between md:gap-8 py-6 ${
               videoQueue.length - 1 !== index
@@ -88,7 +101,7 @@ const PlayerList: FC<any> = ({
             }`}
             key={video.id}
             onDragEnter={(e) => handleDragEnter(e, index)}
-            onDragEnd={(e) => handleDragEnd(e, index)}
+            onDragEnd={() => handleDragEnd()}
           >
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">

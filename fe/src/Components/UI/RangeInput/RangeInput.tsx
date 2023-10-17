@@ -1,7 +1,15 @@
 import React from "react";
 import { Range, getTrackBackground } from "react-range";
 
-const RangeInput: React.FC<any> = ({ volume, handleVolumeChange }) => {
+interface RangeInputProps {
+  volume: number;
+  handleVolumeChange: (volume: number) => void;
+}
+
+const RangeInput: React.FC<RangeInputProps> = ({
+  volume,
+  handleVolumeChange,
+}) => {
   const [values, setValues] = React.useState([volume]);
   return (
     <Range
