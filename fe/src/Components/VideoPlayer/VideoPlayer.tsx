@@ -210,10 +210,9 @@ const VideoPlayer = () => {
     newQueue: VideoItem[],
     isEnd: boolean = false
   ) => {
-    setVideoQueue(newQueue);
-
+    setVideoQueue([videoQueue[0], ...newQueue]);
     if (socketRef.current && isEnd === true) {
-      socketRef.current.emit("updateQueueByDragAndDrop", newQueue);
+      socketRef.current.emit("updateQueueByDragAndDrop", videoQueue);
     }
   };
 

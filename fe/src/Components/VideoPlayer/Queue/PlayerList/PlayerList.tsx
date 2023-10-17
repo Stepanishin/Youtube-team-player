@@ -44,26 +44,17 @@ const PlayerList: FC<any> = ({
   const dragItemIndex = useRef(null);
 
   const handleDragStart = (e: any, index: any) => {
-    // Проверяем, является ли пользователь администратором и не является ли элемент первым в списке
-    if (index !== 0) {
-      dragItem.current = e.currentTarget.closest(".video__container");
-      dragItemIndex.current = index;
+    dragItem.current = e.currentTarget.closest(".video__container");
+    dragItemIndex.current = index;
 
-      // Установить "призрачный" элемент для перетаскивания
-      if (dragItem.current) {
-        e.dataTransfer.setDragImage(dragItem.current, 0, 0);
-      }
-    } else {
-      e.preventDefault();
+    // Установить "призрачный" элемент для перетаскивания
+    if (dragItem.current) {
+      e.dataTransfer.setDragImage(dragItem.current, 0, 0);
     }
   };
 
   const handleDragEnter = (e: any, index: any) => {
-    if (
-      dragItemIndex.current !== null &&
-      dragItemIndex.current !== index &&
-      index !== 0
-    ) {
+    if (dragItemIndex.current !== null && dragItemIndex.current !== index) {
       const updatedVideoQueue = [...videoQueue];
       const [removed] = updatedVideoQueue.splice(dragItemIndex.current ?? 0, 1);
       updatedVideoQueue.splice(index, 0, removed);
@@ -75,26 +66,14 @@ const PlayerList: FC<any> = ({
     }
   };
 
-  const handleDragEnd = (e: any) => {
-    if (dragItem.current !== null) {
-      dragItem.current.style.display = "flex";
+  const handleDragEnd = (e: any, index: any) => {
+    const updatedVideoQueue = [...videoQueue];
+    const [removed] = updatedVideoQueue.splice(dragItemIndex.current ?? 0, 1);
+    updatedVideoQueue.splice(dragItemIndex?.current!, 0, removed);
+    updateVideoQueue(updatedVideoQueue, true);
 
-      // Эта часть кода может быть перенесена из handleDragEnter
-      if (dragItemIndex.current !== null) {
-        const updatedVideoQueue = [...videoQueue];
-        const [removed] = updatedVideoQueue.splice(
-          dragItemIndex.current ?? 0,
-          1
-        );
-        updatedVideoQueue.splice(dragItemIndex.current, 0, removed);
-
-        // Обновляем состояние videoQueue в самом конце, после всех изменений
-        updateVideoQueue(updatedVideoQueue, true);
-      }
-
-      dragItem.current = null;
-      dragItemIndex.current = null;
-    }
+    dragItem.current = null;
+    dragItemIndex.current = null;
   };
 
   return (
@@ -109,7 +88,8 @@ const PlayerList: FC<any> = ({
             }`}
             key={video.id}
             onDragEnter={(e) => handleDragEnter(e, index)}
-            onDragEnd={handleDragEnd}
+            onDragEnd={(e) => handleDragEnd(e, index)}
+            // onDragEnd={handleDragEnd}
           >
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
