@@ -8,9 +8,9 @@ interface TooltipProps {
 
 const Tooltip: FC<TooltipProps> = ({ children }) => {
   return (
-    <div className={`absolute`}>
-      <Paragraph type={ParagraphTypeEnum.p1_Small}>{children}</Paragraph>
-    </div>
+    <Paragraph className="absolute" type={ParagraphTypeEnum.p1_Small}>
+      {children}
+    </Paragraph>
   );
 };
 

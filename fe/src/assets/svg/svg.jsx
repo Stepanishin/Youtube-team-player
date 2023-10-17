@@ -8,7 +8,7 @@ export const VolumeIncreaseIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="26"
         height="24"
@@ -32,7 +32,7 @@ export const VolumeDecreaseIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="21"
         height="24"
@@ -60,7 +60,7 @@ export const PlayIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="16"
         height="20"
@@ -84,7 +84,7 @@ export const PauseIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="18"
         height="20"
@@ -112,7 +112,7 @@ export const NextAudioIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="23"
         height="20"
@@ -140,7 +140,7 @@ export const PrevioustAudioIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="23"
         height="20"
@@ -176,7 +176,7 @@ export const VolumeXIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="28"
@@ -202,7 +202,7 @@ export const DeleteIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="24"
         height="20"
@@ -230,7 +230,7 @@ export const AddIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="22"
         height="16"
@@ -271,7 +271,7 @@ export const ShuffleIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
@@ -293,7 +293,7 @@ export const ShuffleIcon = () => {
 export const StarSolidIcon = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   return (
-    <div>
+    <div className="relative">
       <svg
         width="22"
         height="20"
@@ -317,7 +317,7 @@ export const StarSolidIcon = () => {
 export const StarEmptyIcon = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   return (
-    <div>
+    <div className="relative">
       <svg
         width="23"
         height="20"
@@ -344,7 +344,7 @@ export const DragAndDropIcon = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="20"
@@ -366,7 +366,7 @@ export const CurrentyPlaying = () => {
   const color = mode === "dark" ? "#fff" : "#000";
 
   return (
-    <div>
+    <div className="relative">
       <svg
         width="16"
         height="12"
