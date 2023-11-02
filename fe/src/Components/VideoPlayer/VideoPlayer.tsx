@@ -248,6 +248,10 @@ const VideoPlayer = () => {
     }
   };
 
+  const handleNext = () => {
+    socketRef.current!.emit("nextSong");
+  };
+
   return (
     <div className="flex flex-col xl:flex-row justify-center p-6 sm:p-8 gap-6 sm:gap-8 scrollbar-none">
       <Queue
@@ -267,6 +271,7 @@ const VideoPlayer = () => {
         updateVideoQueue={updateVideoQueueByDragAndDrop}
         recentlyPlayedQueue={recentlyPlayedQueue}
         onVideoSelect={onVideoSelect}
+        handleNext={handleNext}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}

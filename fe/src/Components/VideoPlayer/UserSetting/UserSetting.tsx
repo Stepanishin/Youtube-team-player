@@ -43,7 +43,6 @@ const TAB_CONFIG = [
     title: "USERS",
     icon: <UsersIcon hover={false} />,
     component: (props: UserSettingProps) => <Users {...props} />,
-    isUser: true,
     isAdmin: true,
   },
 ];
@@ -87,7 +86,7 @@ const UserSetting: FC<UserSettingProps> = ({
         mode === "dark"
           ? "bg-background-bgDark100"
           : "bg-background-bgLight200 border-solid border-accent-gray200 border"
-      } rounded-md xl:min-w-[384px] 2xl:min-w-[557px] 2xl:w-[557px] scrollbar-none max-h-[1000px] md:max-h-[750px] xl:max-h-none xl:h-[calc(100vh-140px)] xl:min-h-[1000px] overflow-y-scroll`}
+      } rounded-md xl:min-w-[384px] xl:max-w-[384px] 2xl:min-w-[557px] 2xl:w-[557px] scrollbar-none max-h-[1000px] md:max-h-[750px] xl:max-h-none xl:h-[calc(100vh-140px)] xl:min-h-[1000px] overflow-y-scroll`}
     >
       <div className="flex overflow-auto scrollbar-none">
         {TAB_CONFIG.map((tab) => {

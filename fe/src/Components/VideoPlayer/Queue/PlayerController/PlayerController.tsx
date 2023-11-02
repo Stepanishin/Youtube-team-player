@@ -24,6 +24,7 @@ interface PlayerControllerProps {
   shuffleVideoListHandler: () => void;
   toggleFavorite: (video: VideoItem) => void;
   currentVideo: VideoItem;
+  handleNext: () => void;
 }
 
 const PlayerController: FC<PlayerControllerProps> = ({
@@ -34,6 +35,7 @@ const PlayerController: FC<PlayerControllerProps> = ({
   shuffleVideoListHandler,
   toggleFavorite,
   currentVideo,
+  handleNext,
 }) => {
   const favoriteContext = useContext(FavoriteContext);
   const userContext = useContext(UserContext);
@@ -73,13 +75,13 @@ const PlayerController: FC<PlayerControllerProps> = ({
     <div className="flex flex-col gap-5 lg:flex-row lg:gap-12">
       {user && role === "admin" && (
         <div className="flex gap-8 items-center">
-          <span className="cursor-pointer">
+          {/* <span className="cursor-pointer">
             <PrevioustAudioIcon />
-          </span>
-          <span className="cursor-pointer">
+          </span> */}
+          <span className="cursor-pointer" onClick={handlePlayPause}>
             {isPlaying ? <PauseIcon /> : <PlayIcon />}
           </span>
-          <span className="cursor-pointer">
+          <span className="cursor-pointer" onClick={handleNext}>
             <NextAudioIcon />
           </span>
           <span className="cursor-pointer" onClick={shuffleVideoListHandler}>
@@ -98,9 +100,6 @@ const PlayerController: FC<PlayerControllerProps> = ({
           </span>
         )}
         <RangeInput volume={volume} handleVolumeChange={handleVolumeChange} />
-        <span>
-          <VolumeIncreaseIcon />
-        </span>
         <span className="cursor-pointer" onClick={handlePlayPause}>
           {isPlaying ? <PauseIcon /> : <PlayIcon />}
         </span>
