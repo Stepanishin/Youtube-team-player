@@ -14,7 +14,13 @@ import Heading from "@/Components/UI/Heading/Heading";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import DefaultButton from "@/Components/UI/DefaultButton/DefaultButton";
 
-const FavoritePlayList: FC<any> = ({
+interface FavoritePlayListProps {
+  toggleFavorite: (video: VideoItem) => void;
+  onVideoSelect: (video: VideoItem) => void;
+  isFavoriteToggled: boolean;
+}
+
+const FavoritePlayList: FC<FavoritePlayListProps> = ({
   toggleFavorite,
   onVideoSelect,
   isFavoriteToggled,
@@ -35,7 +41,7 @@ const FavoritePlayList: FC<any> = ({
     const fetchFavorites = async () => {
       try {
         if (user) {
-          const response: any = await axios.get(
+          const response = await axios.get(
             `${process.env.REACT_APP_SERVER_ENDPOINT}/favoriteList`,
             {
               params: {

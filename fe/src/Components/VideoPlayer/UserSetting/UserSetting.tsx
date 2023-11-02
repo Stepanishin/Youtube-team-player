@@ -66,7 +66,7 @@ const UserSetting: FC<UserSettingProps> = ({
 
   const { mode } = useContext(ThemeContext);
 
-  // function for touch devices to swipe between tabs
+  // function for touch devices to swipe between tabs. It seems that it is not working
   const handleTouchMove = (e: any) => {
     e.currentTarget.scrollBy({
       top: 0,

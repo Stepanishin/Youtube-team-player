@@ -31,7 +31,7 @@ const DefaultButton: FC<DefaultButtonProps> = ({
   return (
     <button
       type="submit"
-      className={`${stylesByType[mode].default} ${stylesByType[mode].hover} ${stylesByType[mode].focus} flex justify-center font-nunitoSans w-full px-3 py-2 text-neutral-white rounded-[5px] ${className}`}
+      className={`${stylesByType[mode].default} ${stylesByType[mode].hover} ${stylesByType[mode].focus} flex justify-center items-center font-nunitoSans w-full px-3 py-2 text-neutral-white rounded-[5px] ${className}`}
       onClick={onClick}
       disabled={disabled}
     >

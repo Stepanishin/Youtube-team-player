@@ -1,5 +1,5 @@
-import { FC, useContext } from "react";
-import YouTube, { YouTubeEvent } from "react-youtube";
+import React, { FC, useContext } from "react";
+import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import PlayerController from "./PlayerController/PlayerController";
 import PlayerList from "./PlayerList/PlayerList";
 import { CurrentyPlaying } from "@/assets/svg/svg";
@@ -8,8 +8,29 @@ import Paragraph from "@/Components/UI/Paragraph/Paragraph";
 import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import Heading from "@/Components/UI/Heading/Heading";
+import { VideoItem } from "@/utils/types/video-item.type";
+import DefaultButton from "@/Components/UI/DefaultButton/DefaultButton";
+import DefaultTab from "@/Components/UI/DefaultTab/DefaultTab";
 
-const Queue: FC<any> = ({
+interface QueueProps {
+  currentVideo: VideoItem | null;
+  opts: YouTubeProps["opts"];
+  playerRef: any;
+  onEnd: () => void;
+  handleVolumeChange: (value: number) => void;
+  handlePlayPause: () => void;
+  isPlaying: boolean;
+  volume: number;
+  videoQueue: VideoItem[];
+  recentlyPlayedQueue: VideoItem[];
+  removeVideoFromQueue: (deletedVideo: VideoItem) => void;
+  toggleFavorite: (video: VideoItem) => void;
+  userCount: number;
+  shuffleVideoListHandler: () => void;
+  updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
+}
+
+const Queue: FC<QueueProps> = ({
   currentVideo,
   opts,
   playerRef,
@@ -19,15 +40,19 @@ const Queue: FC<any> = ({
   isPlaying,
   volume,
   videoQueue,
+  recentlyPlayedQueue,
   removeVideoFromQueue,
   toggleFavorite,
-  userCount,
   shuffleVideoListHandler,
   updateVideoQueue,
 }) => {
   const { mode } = useContext(ThemeContext);
 
-  const onReady = (event: YouTubeEvent<any>) => {
+  const [activeTab, setActiveTab] = React.useState<
+    "UP_NEXT" | "RECENTLY_PLAYED"
+  >("UP_NEXT");
+
+  const onReady = (event: YouTubeEvent) => {
     event.target.setVolume(volume);
   };
 
@@ -39,67 +64,103 @@ const Queue: FC<any> = ({
           : "bg-background-bgLight200 border-solid border-accent-gray200 border"
       } p-6 md:p-8 flex flex-col rounded-md w-full scrollbar-none max-h-[1000px] md:max-h-[750px] xl:max-h-none xl:h-[calc(100vh-140px)]  xl:min-h-[1000px] overflow-y-scroll`}
     >
-      <div className="flex flex-col md:flex-row items-start gap-4 md:items-start md:gap-9">
-        {currentVideo && (
-          <div className="w-[224px] md:w-[280px]">
-            <YouTube
-              videoId={currentVideo.id}
-              opts={opts}
-              onEnd={onEnd}
-              ref={playerRef}
-              onReady={onReady}
-            />
-          </div>
-        )}
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2 md:gap-4">
-            <div className="flex gap-2 items-center">
-              <CurrentyPlaying />
-              <Paragraph type={ParagraphTypeEnum.p3_Default}>
-                CURRENTLY PLAYING
-              </Paragraph>
+      {
+        videoQueue.length !== 0 ? (
+          <>      <div className="flex flex-col md:flex-row items-start gap-4 md:items-start md:gap-9">
+          {currentVideo && (
+            <div className="w-[224px] md:w-[280px]">
+              <YouTube
+                videoId={currentVideo.id}
+                opts={opts}
+                onEnd={onEnd}
+                ref={playerRef}
+                onReady={onReady}
+              />
             </div>
-            <div className="flex flex-col gap-2">
-              <Heading type={HeadingTypeEnum.h1_Small}>
-                {currentVideo?.title}
-              </Heading>
-              <div className="flex flex-col md:flex-row items-start md:items-center gap-0 md:gap-2">
-                <Paragraph type={ParagraphTypeEnum.p1_Small}>
-                  {currentVideo?.duration}
-                </Paragraph>
-                <div
-                  className={`${
-                    mode === "dark"
-                      ? "bg-neutral-white"
-                      : "bg-primary-blackPetrol"
-                  } hidden md:block w-2 h-2  rounded-full`}
-                ></div>
-                <Paragraph type={ParagraphTypeEnum.p1_Small}>
-                  Added by {currentVideo?.added}
+          )}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2 md:gap-4">
+              <div className="flex gap-2 items-center">
+                <CurrentyPlaying />
+                <Paragraph type={ParagraphTypeEnum.p3_Default}>
+                  CURRENTLY PLAYING
                 </Paragraph>
               </div>
+              <div className="flex flex-col gap-2">
+                <Heading type={HeadingTypeEnum.h1_Small}>
+                  {currentVideo?.title}
+                </Heading>
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-0 md:gap-2">
+                  <Paragraph type={ParagraphTypeEnum.p1_Small}>
+                    {currentVideo?.duration}
+                  </Paragraph>
+                  <div
+                    className={`${
+                      mode === "dark"
+                        ? "bg-neutral-white"
+                        : "bg-primary-blackPetrol"
+                    } hidden md:block w-2 h-2  rounded-full`}
+                  ></div>
+                  <Paragraph type={ParagraphTypeEnum.p1_Small}>
+                    Added by {currentVideo?.added}
+                  </Paragraph>
+                </div>
+              </div>
             </div>
+            {videoQueue.length > 0 && (
+              <PlayerController
+                volume={volume}
+                handleVolumeChange={handleVolumeChange}
+                handlePlayPause={handlePlayPause}
+                isPlaying={isPlaying}
+                shuffleVideoListHandler={shuffleVideoListHandler}
+                toggleFavorite={toggleFavorite}
+                currentVideo={videoQueue[0]}
+              />
+            )}
           </div>
-          {videoQueue.length > 0 && (
-            <PlayerController
-              volume={volume}
-              handleVolumeChange={handleVolumeChange}
-              handlePlayPause={handlePlayPause}
-              isPlaying={isPlaying}
-              shuffleVideoListHandler={shuffleVideoListHandler}
-              toggleFavorite={toggleFavorite}
-              currentVideo={videoQueue[0]}
-            />
-          )}
         </div>
-      </div>
+  
+        <div className="flex gap-2 mt-4">
+          <DefaultTab
+            onClick={() => setActiveTab("UP_NEXT")}
+            active={activeTab === "UP_NEXT"}
+          >
+            UP NEXT
+          </DefaultTab>
+          <DefaultTab
+            onClick={() => setActiveTab("RECENTLY_PLAYED")}
+            active={activeTab === "RECENTLY_PLAYED"}
+          >
+            RECENTLY PLAYED
+          </DefaultTab>
+        </div>
+  
+        {activeTab === "UP_NEXT" && (
+          <PlayerList
+            videoQueue={videoQueue.slice(1)}
+            removeVideoFromQueue={removeVideoFromQueue}
+            toggleFavorite={toggleFavorite}
+            updateVideoQueue={updateVideoQueue}
+          />
+        )}
+        {activeTab === "RECENTLY_PLAYED" && (
+          <>
+            <PlayerList
+              videoQueue={recentlyPlayedQueue}
+              removeVideoFromQueue={removeVideoFromQueue}
+              toggleFavorite={toggleFavorite}
+              updateVideoQueue={updateVideoQueue}
+              isRecentlyPlayed={true}
+            />
+          </>
+        )}</>
+        ) : 
+        <Paragraph type={ParagraphTypeEnum.p1_Small}>
+          Player is empty, add some videos!
+        </Paragraph>
+      }
 
-      <PlayerList
-        videoQueue={videoQueue.slice(1)}
-        removeVideoFromQueue={removeVideoFromQueue}
-        toggleFavorite={toggleFavorite}
-        updateVideoQueue={updateVideoQueue}
-      />
     </div>
   );
 };

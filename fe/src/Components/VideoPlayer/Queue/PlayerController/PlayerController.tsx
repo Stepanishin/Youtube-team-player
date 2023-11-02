@@ -16,7 +16,17 @@ import RangeInput from "@/Components/UI/RangeInput/RangeInput";
 import { VideoItem } from "@/utils/types/video-item.type";
 import { FavoriteContext } from "@/context/FavoriteContext/FavoriteContext";
 
-const PlayerController: FC<any> = ({
+interface PlayerControllerProps {
+  volume: number;
+  handleVolumeChange: (volume: number) => void;
+  handlePlayPause: () => void;
+  isPlaying: boolean;
+  shuffleVideoListHandler: () => void;
+  toggleFavorite: (video: VideoItem) => void;
+  currentVideo: VideoItem;
+}
+
+const PlayerController: FC<PlayerControllerProps> = ({
   volume,
   handleVolumeChange,
   handlePlayPause,

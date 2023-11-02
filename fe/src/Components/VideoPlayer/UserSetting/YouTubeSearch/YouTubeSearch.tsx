@@ -15,6 +15,7 @@ import Paragraph from "@/Components/UI/Paragraph/Paragraph";
 import SearchInput from "@/Components/UI/SearchInput/SearchInput";
 import Heading from "@/Components/UI/Heading/Heading";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
+import { UserResponse } from "@/utils/types/search-data.type";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -26,7 +27,7 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
   toggleFavorite,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<VideoItem[]>([]);
 
   const userContext = useContext(UserContext);
   const favoriteContext = useContext(FavoriteContext);
@@ -43,19 +44,15 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
   };
 
   const searchYouTube = useCallback(
-    async (e: any) => {
-      e.preventDefault();
+    async (e: React.FormEvent<HTMLFormElement> | undefined) => {
+      e?.preventDefault();
 
       try {
         const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchTerm}&key=${process.env.REACT_APP_API_KEY}&type=video&maxResults=10`;
         const searchResponse = await fetch(searchUrl);
-        const searchData = await searchResponse.json();
+        const searchData: UserResponse = await searchResponse.json();
 
-        if (searchData.error) {
-          throw new Error(searchData.error.message);
-        }
-
-        const videoIds = searchData.items.map((item: any) => item.id.videoId);
+        const videoIds = searchData.items.map((item) => item.id.videoId);
 
         const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${videoIds.join(
           ","
@@ -67,9 +64,14 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
           throw new Error(detailsData.error.message);
         }
 
-        const resultsWithDetails = searchData.items.map((item: any) => {
+        const resultsWithDetails = searchData.items.map((item) => {
           const details = detailsData.items.find(
-            (detail: any) => detail.id === item.id.videoId
+            (detail: {
+              id: string;
+              title: string;
+              duration: string;
+              views: any;
+            }) => detail.id === item.id.videoId
           );
           const duration = formatDuration(details?.contentDetails?.duration);
           return {
