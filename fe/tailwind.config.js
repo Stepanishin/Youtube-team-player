@@ -78,6 +78,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
+  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar"), require('tailwind-hamburgers')],
   purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
 };
