@@ -28,6 +28,7 @@ interface QueueProps {
   userCount: number;
   shuffleVideoListHandler: () => void;
   updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
+  onVideoSelect: (video: VideoItem) => void;
 }
 
 const Queue: FC<QueueProps> = ({
@@ -45,6 +46,7 @@ const Queue: FC<QueueProps> = ({
   toggleFavorite,
   shuffleVideoListHandler,
   updateVideoQueue,
+  onVideoSelect
 }) => {
   const { mode } = useContext(ThemeContext);
 
@@ -152,6 +154,7 @@ const Queue: FC<QueueProps> = ({
               toggleFavorite={toggleFavorite}
               updateVideoQueue={updateVideoQueue}
               isRecentlyPlayed={true}
+              onVideoSelect={onVideoSelect}
             />
           </>
         )}</>

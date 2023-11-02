@@ -246,6 +246,7 @@ const VideoPlayer = () => {
         shuffleVideoListHandler={shuffleVideoListHandler}
         updateVideoQueue={updateVideoQueueByDragAndDrop}
         recentlyPlayedQueue={recentlyPlayedQueue}
+        onVideoSelect={onVideoSelect}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}
