@@ -105,6 +105,7 @@ io.on("connection", (socket) => {
 
   // Sending the current queue to the newly connected user
   socket.emit("updateQueue", [...userQueue]);
+  socket.emit("updateRecentlyPlayedQueue", [...RECENTLY_PLAYED]);
 
   socket.on("addVideo", (video) => {
     // Проверка на существование видео в очереди
@@ -153,6 +154,7 @@ io.on("connection", (socket) => {
 
     // Рассылка обновленной очереди всем подключенным пользователям
     io.emit("updateQueue", [...userQueue]);
+    io.emit("updateRecentlyPlayedQueue", [...RECENTLY_PLAYED]);
   });
 
   socket.on("togglePlayPause", (isPlaying) => {

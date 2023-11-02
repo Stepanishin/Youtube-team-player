@@ -19,6 +19,7 @@ interface PlayerListProps {
   removeVideoFromQueue: (deletedVideo: VideoItem) => void;
   toggleFavorite: (video: VideoItem) => void;
   updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
+  isRecentlyPlayed?: boolean;
 }
 
 const PlayerList: FC<PlayerListProps> = ({
@@ -26,6 +27,7 @@ const PlayerList: FC<PlayerListProps> = ({
   removeVideoFromQueue,
   toggleFavorite,
   updateVideoQueue,
+  isRecentlyPlayed,
 }) => {
   const favoriteContext = useContext(FavoriteContext);
   const userContext = useContext(UserContext);
@@ -105,7 +107,7 @@ const PlayerList: FC<PlayerListProps> = ({
           >
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                {user && role === "admin" && (
+                {user && role === "admin" && !isRecentlyPlayed && (
                   <span
                     draggable
                     onDragStart={(e) => handleDragStart(e, index)}
@@ -165,7 +167,7 @@ const PlayerList: FC<PlayerListProps> = ({
                 </span>
               )}
 
-              {user && role === "admin" && (
+              {user && role === "admin" && !isRecentlyPlayed && (
                 <span
                   className="cursor-pointer"
                   onClick={() => removeVideoFromQueue(video)}

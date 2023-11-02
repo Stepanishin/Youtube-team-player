@@ -13,6 +13,7 @@ const serverEndpoint: string | undefined =
 
 const VideoPlayer = () => {
   const [videoQueue, setVideoQueue] = useState<VideoItem[]>([]);
+  const [recentlyPlayedQueue, setRecentlyPlayedQueue] = useState<VideoItem[]>([]);
   const [currentVideo, setCurrentVideo] = useState<VideoItem | null>(null);
   const [endTriggered, setEndTriggered] = useState(false);
   const [volume, setVolume] = useState(10);
@@ -41,6 +42,10 @@ const VideoPlayer = () => {
       if (currentVideo === null && queue.length > 0) {
         setCurrentVideo(queue[0]);
       }
+    });
+
+    socketRef.current.on("updateRecentlyPlayedQueue", (queue) => {
+      setRecentlyPlayedQueue(queue);
     });
 
     socketRef.current.on("setPlayPause", (isPlayingFromServer) => {
@@ -240,6 +245,7 @@ const VideoPlayer = () => {
         userCount={userCount}
         shuffleVideoListHandler={shuffleVideoListHandler}
         updateVideoQueue={updateVideoQueueByDragAndDrop}
+        recentlyPlayedQueue={recentlyPlayedQueue}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}
