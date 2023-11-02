@@ -44,44 +44,7 @@ let userQueue = [];
 // Количество подключенных пользователей
 let connectedUsers = 0;
 // Пользователи
-let USERS = [
-  {
-    id: "123",
-    name: "Evgenii Stepanishin",
-  },
-  {
-    id: "456",
-    name: "Ivan Ivanov",
-  },
-];
-
-// Дефолтная очередь
-let DEFAULT_VIDEOS = [
-  {
-    id: "TdrL3QxjyVw",
-    title: "Lana Del Rey - Summertime Sadness",
-    duration: "4:25",
-    added: "default",
-  },
-  {
-    id: "MiAoetOXKcY",
-    title: "Lana Del Rey - Say Yes To Heaven ",
-    duration: "3:29",
-    added: "default",
-  },
-  {
-    id: "Bag1gUxuU0g",
-    title: "Lana Del Rey - Born To Die",
-    duration: "4:46",
-    added: "default",
-  },
-  {
-    id: "o_1aF54DO60",
-    title: "Lana Del Rey - Young and Beautiful",
-    duration: "3:58",
-    added: "default",
-  },
-];
+let USERS = [];
 
 let RECENTLY_PLAYED = [];
 
@@ -191,14 +154,43 @@ io.on("connection", (socket) => {
     if (userQueue.length > 1) {
       userQueue = shuffleExceptFirst(userQueue);
       io.emit("updateQueue", [...userQueue]);
-    } else {
-      io.emit("updateQueue", [...DEFAULT_VIDEOS]);
     }
   });
 
   socket.on("updateQueueByDragAndDrop", (newQueue) => {
     userQueue = newQueue;
     io.emit("updateQueue", [...userQueue]);
+  });
+
+  socket.on("nextSong", () => {
+    if (userQueue.length > 1) {
+      const nextVideo = userQueue[0]; // Второй элемент в очереди становится следующим
+
+      // Обработка логики по аналогии с removeVideoBySwitching
+      if (!RECENTLY_PLAYED.some((v) => v.id === nextVideo.id)) {
+        RECENTLY_PLAYED.push(nextVideo);
+      }
+
+      userQueue = userQueue.filter((v) => {
+        return v.id !== nextVideo.id;
+      });
+
+      // если в очереди остался всего один элемент, то добавляем в очеред все элементы из RECENTLY_PLAYED, кроме того что уже есть в очереди, предварительно перемешав RECENTLY_PLAYED
+      if (userQueue.length === 1) {
+        const recentlyPlayedWithoutCurrent = RECENTLY_PLAYED.filter(
+          (v) => v.id !== userQueue[0].id
+        );
+        const shuffledRecentlyPlayedWithoutCurrent = shuffleArray(
+          recentlyPlayedWithoutCurrent
+        );
+        userQueue = [...userQueue, ...shuffledRecentlyPlayedWithoutCurrent];
+        RECENTLY_PLAYED = [];
+      }
+
+      // Рассылка обновленной очереди всем подключенным пользователям
+      io.emit("updateQueue", [...userQueue]);
+      io.emit("updateRecentlyPlayedQueue", [...RECENTLY_PLAYED]);
+    }
   });
 
   socket.on("disconnect", () => {
