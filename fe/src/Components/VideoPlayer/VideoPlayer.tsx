@@ -7,19 +7,23 @@ import UserSetting from "./UserSetting/UserSetting";
 import { VideoItem } from "../../utils/types/video-item.type";
 import toast, { Toaster } from "react-hot-toast";
 import { UserContext } from "../../context/UserContext/UserContext";
+import { User } from "@/utils/types/user.type";
 
 const serverEndpoint: string | undefined =
   process.env.REACT_APP_SERVER_ENDPOINT;
 
 const VideoPlayer = () => {
   const [videoQueue, setVideoQueue] = useState<VideoItem[]>([]);
-  const [recentlyPlayedQueue, setRecentlyPlayedQueue] = useState<VideoItem[]>([]);
+  const [recentlyPlayedQueue, setRecentlyPlayedQueue] = useState<VideoItem[]>(
+    []
+  );
   const [currentVideo, setCurrentVideo] = useState<VideoItem | null>(null);
   const [endTriggered, setEndTriggered] = useState(false);
   const [volume, setVolume] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFavoriteToggled, setIsFavoriteToggled] = useState(false);
   const [userCount, setUserCount] = useState(0);
+  const [usersList, setUsersList] = useState<User[]>([]);
 
   const userContext = useContext(UserContext);
 
@@ -37,11 +41,16 @@ const VideoPlayer = () => {
       return;
     }
     socketRef.current = socketIOClient(serverEndpoint);
+
     socketRef.current.on("updateQueue", (queue) => {
       setVideoQueue(queue);
       if (currentVideo === null && queue.length > 0) {
         setCurrentVideo(queue[0]);
       }
+    });
+
+    socketRef.current.on("getAllUsers", (users) => {
+      setUsersList(users);
     });
 
     socketRef.current.on("updateRecentlyPlayedQueue", (queue) => {
@@ -75,6 +84,17 @@ const VideoPlayer = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!serverEndpoint) {
+      console.error("SERVER_ENDPOINT is not defined");
+      return;
+    }
+
+    if (socketRef.current && user) {
+      socketRef.current.emit("userLogin", user);
+    }
+  }, [user]);
 
   const onEnd = () => {
     if (endTriggered) return;
@@ -252,6 +272,8 @@ const VideoPlayer = () => {
         onVideoSelect={onVideoSelect}
         toggleFavorite={toggleFavorite}
         isFavoriteToggled={isFavoriteToggled}
+        usersList={usersList}
+        userCount={userCount}
       />
       <Toaster position="top-right" reverseOrder={false} />
     </div>

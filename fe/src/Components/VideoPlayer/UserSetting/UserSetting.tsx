@@ -7,11 +7,15 @@ import { VideoItem } from "../../../utils/types/video-item.type";
 import { ThemeContext } from "@/context/ThemeContext/ThemeContext";
 import { LikesIcon, ReadMeIcon, SearchIcon, UsersIcon } from "@/assets/svg/svg";
 import { UserContext } from "@/context/UserContext/UserContext";
+import Users from "./Users/Users";
+import { User } from "@/utils/types/user.type";
 
 interface UserSettingProps {
   onVideoSelect: (video: VideoItem) => void;
   toggleFavorite: (video: VideoItem) => void;
   isFavoriteToggled: boolean;
+  usersList: User[];
+  userCount: number;
 }
 
 const TAB_CONFIG = [
@@ -38,7 +42,7 @@ const TAB_CONFIG = [
     id: UserSettingsTabTypeEnum.Users,
     title: "USERS",
     icon: <UsersIcon hover={false} />,
-    component: () => <ReadMe />,
+    component: (props: UserSettingProps) => <Users {...props} />,
     isUser: true,
     isAdmin: true,
   },
@@ -48,6 +52,8 @@ const UserSetting: FC<UserSettingProps> = ({
   onVideoSelect,
   toggleFavorite,
   isFavoriteToggled,
+  usersList,
+  userCount,
 }) => {
   const userContext = useContext(UserContext);
 
@@ -127,6 +133,8 @@ const UserSetting: FC<UserSettingProps> = ({
               onVideoSelect={onVideoSelect}
               toggleFavorite={toggleFavorite}
               isFavoriteToggled={isFavoriteToggled}
+              usersList={usersList}
+              userCount={userCount}
             />
           ) : null
         )}
