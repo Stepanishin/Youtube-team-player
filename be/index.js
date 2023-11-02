@@ -43,6 +43,17 @@ const io = socketIo(server, {
 let userQueue = [];
 // Количество подключенных пользователей
 let connectedUsers = 0;
+// Пользователи
+let USERS = [
+  {
+    id: "123",
+    name: "Evgenii Stepanishin",
+  },
+  {
+    id: "456",
+    name: "Ivan Ivanov",
+  },
+];
 
 // Дефолтная очередь
 let DEFAULT_VIDEOS = [
@@ -106,6 +117,20 @@ io.on("connection", (socket) => {
   // Sending the current queue to the newly connected user
   socket.emit("updateQueue", [...userQueue]);
   socket.emit("updateRecentlyPlayedQueue", [...RECENTLY_PLAYED]);
+
+  USERS.push({ id: socket.id, name: "Anonymous" });
+  io.emit("getAllUsers", USERS);
+
+  // Обработчик события входа пользователя
+  socket.on("userLogin", (email) => {
+    // Находим пользователя в массиве и обновляем его имя
+    const user = USERS.find((u) => u.id === socket.id);
+    if (user) {
+      user.name = email;
+      // Отправляем обновленный список пользователей всем клиентам
+      io.emit("getAllUsers", USERS);
+    }
+  });
 
   socket.on("addVideo", (video) => {
     // Проверка на существование видео в очереди
@@ -178,6 +203,12 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     connectedUsers--;
+
+    // Удаляем пользователя из массива
+    USERS = USERS.filter((user) => user.id !== socket.id);
+    // Отправляем обновленный список пользователей всем клиентам
+    io.emit("getAllUsers", USERS);
+
     io.emit("getUsersCount", connectedUsers);
     console.log("Client disconnected", socket.id);
   });

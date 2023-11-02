@@ -1,6 +1,7 @@
 import React, { FC, useContext, useRef } from "react";
 import { VideoItem } from "../../../../utils/types/video-item.type";
 import {
+  AddIcon,
   DeleteIcon,
   DragAndDropIcon,
   StarEmptyIcon,
@@ -20,6 +21,7 @@ interface PlayerListProps {
   toggleFavorite: (video: VideoItem) => void;
   updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
   isRecentlyPlayed?: boolean;
+  onVideoSelect?: (video: VideoItem) => void;
 }
 
 const PlayerList: FC<PlayerListProps> = ({
@@ -28,6 +30,7 @@ const PlayerList: FC<PlayerListProps> = ({
   toggleFavorite,
   updateVideoQueue,
   isRecentlyPlayed,
+  onVideoSelect
 }) => {
   const favoriteContext = useContext(FavoriteContext);
   const userContext = useContext(UserContext);
@@ -169,12 +172,30 @@ const PlayerList: FC<PlayerListProps> = ({
 
               {user && role === "admin" && !isRecentlyPlayed && (
                 <span
-                  className="cursor-pointer"
+                  className="cursor-pointer relative top-1"
                   onClick={() => removeVideoFromQueue(video)}
                 >
                   <DeleteIcon />
                 </span>
               )}
+
+              {
+                user && onVideoSelect && isRecentlyPlayed && role === "admin" && (
+                  <span
+                  className="cursor-pointer relative top-1"
+                  onClick={() =>
+                    onVideoSelect({
+                      id: video.id,
+                      title: video.title,
+                      duration: video.duration,
+                      ...(user ? { added: user } : {}),
+                    })
+                  }
+                >
+                  <AddIcon />
+                </span>
+                )
+              }
             </div>
           </div>
         ))}
