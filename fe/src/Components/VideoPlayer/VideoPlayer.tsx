@@ -147,7 +147,8 @@ const VideoPlayer = () => {
             playerRef?.current?.internalPlayer.playVideo();
           }
           if (result === 1) {
-            videoStarted = true; // Видео начало воспроизводиться
+            // Video starts playing
+            videoStarted = true;
           }
           if ((result === -1 || result === 0) && videoStarted) {
             onEnd();
@@ -158,7 +159,8 @@ const VideoPlayer = () => {
         });
     }
     if (currentVideo) {
-      setEndTriggered(false); // Сбрасываем флаг, когда начинает воспроизводиться новое видео
+      // update flag when new video starts playing
+      setEndTriggered(false);
     }
   }, [currentVideo]);
 
@@ -192,7 +194,7 @@ const VideoPlayer = () => {
       }
       setIsPlaying(!isPlaying);
 
-      // Отправляем текущее состояние воспроизведения на сервер
+      // Send current play state to server
       if (serverEndpoint) {
         if (socketRef.current) {
           socketRef.current.emit("togglePlayPause", !isPlaying);

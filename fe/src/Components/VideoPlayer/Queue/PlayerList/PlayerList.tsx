@@ -30,7 +30,7 @@ const PlayerList: FC<PlayerListProps> = ({
   toggleFavorite,
   updateVideoQueue,
   isRecentlyPlayed,
-  onVideoSelect
+  onVideoSelect,
 }) => {
   const favoriteContext = useContext(FavoriteContext);
   const userContext = useContext(UserContext);
@@ -62,7 +62,7 @@ const PlayerList: FC<PlayerListProps> = ({
     dragItem.current = e.currentTarget.closest(".video__container");
     dragItemIndex.current = index;
 
-    // Установить "призрачный" элемент для перетаскивания
+    // Set "ghost" element for dragging
     if (dragItem.current) {
       e.dataTransfer.setDragImage(dragItem.current, 0, 0);
     }
@@ -179,23 +179,24 @@ const PlayerList: FC<PlayerListProps> = ({
                 </span>
               )}
 
-              {
-                user && onVideoSelect && isRecentlyPlayed && role === "admin" && (
+              {user &&
+                onVideoSelect &&
+                isRecentlyPlayed &&
+                role === "admin" && (
                   <span
-                  className="cursor-pointer relative top-1"
-                  onClick={() =>
-                    onVideoSelect({
-                      id: video.id,
-                      title: video.title,
-                      duration: video.duration,
-                      ...(user ? { added: user } : {}),
-                    })
-                  }
-                >
-                  <AddIcon />
-                </span>
-                )
-              }
+                    className="cursor-pointer relative top-1"
+                    onClick={() =>
+                      onVideoSelect({
+                        id: video.id,
+                        title: video.title,
+                        duration: video.duration,
+                        ...(user ? { added: user } : {}),
+                      })
+                    }
+                  >
+                    <AddIcon />
+                  </span>
+                )}
             </div>
           </div>
         ))}

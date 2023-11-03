@@ -82,7 +82,6 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
             views: details?.statistics?.viewCount,
           };
         });
-        console.log(resultsWithDetails);
         setResults(resultsWithDetails);
       } catch (error) {
         console.error("An error occurred while fetching data:", error);
