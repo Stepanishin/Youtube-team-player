@@ -11,6 +11,7 @@ import Heading from "@/Components/UI/Heading/Heading";
 import { VideoItem } from "@/utils/types/video-item.type";
 import DefaultTab from "@/Components/UI/DefaultTab/DefaultTab";
 import { PlayerContext } from "@/context/PlayerContext/PlayerContext";
+import QueueTabsEnum from "@/utils/enums/queue-tabs.enum";
 
 interface QueueProps {
   currentVideo: VideoItem | null;
@@ -60,8 +61,8 @@ const Queue: FC<QueueProps> = ({
   const { isPlayerVisible } = playerContext;
 
   const [activeTab, setActiveTab] = React.useState<
-    "UP_NEXT" | "RECENTLY_PLAYED"
-  >("UP_NEXT");
+    QueueTabsEnum.UP_NEXT | QueueTabsEnum.RECENTLY_PLAYED
+  >(QueueTabsEnum.UP_NEXT);
 
   const onReady = (event: YouTubeEvent) => {
     event.target.setVolume(volume);
@@ -143,19 +144,19 @@ const Queue: FC<QueueProps> = ({
           </div>
           <div className="flex gap-2 mt-4">
             <DefaultTab
-              onClick={() => setActiveTab("UP_NEXT")}
-              active={activeTab === "UP_NEXT"}
+              onClick={() => setActiveTab(QueueTabsEnum.UP_NEXT)}
+              active={activeTab === QueueTabsEnum.UP_NEXT}
             >
               UP NEXT
             </DefaultTab>
             <DefaultTab
-              onClick={() => setActiveTab("RECENTLY_PLAYED")}
-              active={activeTab === "RECENTLY_PLAYED"}
+              onClick={() => setActiveTab(QueueTabsEnum.RECENTLY_PLAYED)}
+              active={activeTab === QueueTabsEnum.RECENTLY_PLAYED}
             >
               RECENTLY PLAYED
             </DefaultTab>
           </div>
-          {activeTab === "UP_NEXT" && (
+          {activeTab === QueueTabsEnum.UP_NEXT && (
             <PlayerList
               videoQueue={videoQueue.slice(1)}
               removeVideoFromQueue={removeVideoFromQueue}
@@ -163,7 +164,7 @@ const Queue: FC<QueueProps> = ({
               updateVideoQueue={updateVideoQueue}
             />
           )}
-          {activeTab === "RECENTLY_PLAYED" && (
+          {activeTab === QueueTabsEnum.RECENTLY_PLAYED && (
             <>
               <PlayerList
                 videoQueue={recentlyPlayedQueue}

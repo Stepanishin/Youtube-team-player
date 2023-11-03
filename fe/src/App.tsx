@@ -10,7 +10,9 @@ import { PlayerProvider } from "./context/PlayerContext/PlayerContext";
 function App() {
   return (
     <div className="App">
-      <GoogleOAuthProvider clientId="879160999218-mj177tu4jtt26b6v5p14cp0463ogq7qr.apps.googleusercontent.com">
+      <GoogleOAuthProvider
+        clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
+      >
         <UserProvider>
           <FavoriteProvider>
             <PlayerProvider>
