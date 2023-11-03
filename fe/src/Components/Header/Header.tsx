@@ -11,6 +11,7 @@ import DefaultButton from "../UI/DefaultButton/DefaultButton";
 import Heading from "../UI/Heading/Heading";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import classNames from "classnames";
+import PlayerToggle from "../UI/PlayerToggle/PlayerToggle";
 
 const Header = () => {
   const userContext = useContext(UserContext);
@@ -83,6 +84,7 @@ const Header = () => {
       <Logo />
       <div className="items-center gap-4 hidden md:flex">
         <DarkModeToggle />
+        <PlayerToggle />
         {user ? (
           <div className="flex items-center gap-4">
             <img className="w-9 h-9 rounded-full" src={picture} alt="avatar" />
@@ -164,7 +166,10 @@ const Header = () => {
               </span>
             </DefaultButton>
           )}
-          <DarkModeToggle />
+          <div className="flex gap-4">
+            <DarkModeToggle />
+            <PlayerToggle />
+          </div>
         </div>
       )}
     </header>

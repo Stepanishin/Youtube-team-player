@@ -9,8 +9,8 @@ import ParagraphTypeEnum from "@/utils/enums/paragraph-type.enum";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import Heading from "@/Components/UI/Heading/Heading";
 import { VideoItem } from "@/utils/types/video-item.type";
-import DefaultButton from "@/Components/UI/DefaultButton/DefaultButton";
 import DefaultTab from "@/Components/UI/DefaultTab/DefaultTab";
+import { PlayerContext } from "@/context/PlayerContext/PlayerContext";
 
 interface QueueProps {
   currentVideo: VideoItem | null;
@@ -50,7 +50,14 @@ const Queue: FC<QueueProps> = ({
   onVideoSelect,
   handleNext,
 }) => {
+  const playerContext = useContext(PlayerContext);
+
+  if (!playerContext) {
+    throw new Error("Header must be used within a UserProvider");
+  }
+
   const { mode } = useContext(ThemeContext);
+  const { isPlayerVisible } = playerContext;
 
   const [activeTab, setActiveTab] = React.useState<
     "UP_NEXT" | "RECENTLY_PLAYED"
@@ -70,10 +77,18 @@ const Queue: FC<QueueProps> = ({
     >
       {videoQueue.length !== 0 ? (
         <>
-          {" "}
-          <div className="flex flex-col md:flex-row items-start gap-4 md:items-start md:gap-9">
+          <div
+            className={`flex flex-col md:flex-row items-start gap-4 md:items-start ${
+              isPlayerVisible ? "md:gap-9" : "md:gap-0"
+            }`}
+          >
             {currentVideo && (
-              <div className="w-[224px] md:w-[280px]">
+              <div
+                style={{
+                  width: isPlayerVisible ? "w-[224px] md:w-[280px]" : "0px",
+                  height: isPlayerVisible ? "w-[224px] md:w-[280px]" : "0px",
+                }}
+              >
                 <YouTube
                   videoId={currentVideo.id}
                   opts={opts}
