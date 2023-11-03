@@ -1,0 +1,20 @@
+/project-root
+    /config
+        db.js
+    /controllers
+        userController.js
+        videoController.js
+    /models
+        User.js
+        Video.js
+    /routes
+        userRoutes.js
+        videoRoutes.js
+    /services
+        userService.js
+        videoService.js
+    /sockets
+        socketHandlers.js
+    /utils
+        arrayShuffle.js
+    index.js
