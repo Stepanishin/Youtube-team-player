@@ -16,6 +16,7 @@ import SearchInput from "@/Components/UI/SearchInput/SearchInput";
 import Heading from "@/Components/UI/Heading/Heading";
 import HeadingTypeEnum from "@/utils/enums/heading-type.enum";
 import { UserResponse } from "@/utils/types/search-data.type";
+import replaceHtmlQuotes from "@/utils/helpers/replaceHtmlQuotes";
 
 interface YouTubeSearchProps {
   onVideoSelect: (video: VideoItem) => void;
@@ -76,12 +77,12 @@ const YouTubeSearch: React.FC<YouTubeSearchProps> = ({
           const duration = formatDuration(details?.contentDetails?.duration);
           return {
             id: item.id.videoId,
-            title: item.snippet.title,
+            title: replaceHtmlQuotes(item.snippet.title),
             duration,
             views: details?.statistics?.viewCount,
           };
         });
-
+        console.log(resultsWithDetails);
         setResults(resultsWithDetails);
       } catch (error) {
         console.error("An error occurred while fetching data:", error);
