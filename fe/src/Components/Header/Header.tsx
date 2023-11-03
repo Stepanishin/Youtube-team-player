@@ -58,12 +58,7 @@ const Header = () => {
 
   useEffect(() => {
     if (opened) {
-      const initialWindowWidth = document.body.scrollWidth;
-
       document.body.style.overflow = "hidden";
-
-      const paddingRightValue = window.innerWidth - initialWindowWidth;
-      document.body.style.paddingRight = `${paddingRightValue}px`;
     } else {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";

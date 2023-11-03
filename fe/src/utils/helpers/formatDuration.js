@@ -13,8 +13,7 @@ export function formatDuration(duration) {
     seconds = parseInt(match[6] || "0");
   }
 
-  minutes += hours * 60; // Конвертируем часы в минуты
+  minutes += hours * 60;
 
-  // Форматируем результат
   return minutes + ":" + String(seconds).padStart(2, "0");
 }
