@@ -139,9 +139,19 @@ const FavoritePlayList: FC<FavoritePlayListProps> = ({
           ))}
       </div>
 
-      {!user && <div style={{ marginTop: "20px  " }}>You must log in</div>}
+      {!user && (
+        <div style={{ marginTop: "20px  " }}>
+          <Paragraph type={ParagraphTypeEnum.p1_Small}>
+            You must log in
+          </Paragraph>
+        </div>
+      )}
       {user && favoriteUserList && favoriteUserList.length === 0 && (
-        <div style={{ marginTop: "20px  " }}>No favorite videos</div>
+        <div style={{ marginTop: "20px  " }}>
+          <Paragraph type={ParagraphTypeEnum.p1_Small}>
+            No favorite videos
+          </Paragraph>
+        </div>
       )}
     </div>
   );
