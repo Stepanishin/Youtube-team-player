@@ -51,6 +51,7 @@ const Header = () => {
         { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
       );
 
+      localStorage.setItem("authToken", tokenResponse.access_token);
       beLogin(userInfo.data.email, userInfo.data.picture);
     },
     onError: (errorResponse) => console.log(errorResponse),
@@ -69,6 +70,24 @@ const Header = () => {
       document.body.style.paddingRight = "";
     };
   }, [opened]);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      (async () => {
+        try {
+          const userInfo = await axios.get(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            { headers: { Authorization: `Bearer ${authToken}` } }
+          );
+          beLogin(userInfo.data.email, userInfo.data.picture);
+        } catch (error) {
+          console.error("Error refreshing auth token:", error);
+          localStorage.removeItem("authToken");
+        }
+      })();
+    }
+  }, []);
 
   return (
     <header
