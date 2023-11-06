@@ -31,6 +31,7 @@ interface QueueProps {
   updateVideoQueue: (newQueue: VideoItem[], isEnd?: boolean) => void;
   onVideoSelect: (video: VideoItem) => void;
   handleNext: () => void;
+  setIsPlaying: (isPlaying: boolean) => void;
 }
 
 const Queue: FC<QueueProps> = ({
@@ -50,6 +51,7 @@ const Queue: FC<QueueProps> = ({
   updateVideoQueue,
   onVideoSelect,
   handleNext,
+  setIsPlaying,
 }) => {
   const playerContext = useContext(PlayerContext);
 
@@ -66,6 +68,14 @@ const Queue: FC<QueueProps> = ({
 
   const onReady = (event: YouTubeEvent) => {
     event.target.setVolume(volume);
+  };
+
+  const onStateChange = (event: YouTubeEvent) => {
+    if (event.target.getPlayerState() === 1) {
+      setIsPlaying(true);
+    } else if (event.target.getPlayerState() === 2 || -1) {
+      setIsPlaying(false);
+    }
   };
 
   return (
@@ -98,6 +108,7 @@ const Queue: FC<QueueProps> = ({
                   onEnd={onEnd}
                   ref={playerRef}
                   onReady={onReady}
+                  onStateChange={onStateChange}
                 />
                 <div className="absolute bottom-0 left-0 z-10 h-16 w-full"></div>
               </div>

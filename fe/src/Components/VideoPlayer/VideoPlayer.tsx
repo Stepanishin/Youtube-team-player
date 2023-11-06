@@ -20,7 +20,7 @@ const VideoPlayer = () => {
   const [currentVideo, setCurrentVideo] = useState<VideoItem | null>(null);
   const [endTriggered, setEndTriggered] = useState(false);
   const [volume, setVolume] = useState(10);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isFavoriteToggled, setIsFavoriteToggled] = useState(false);
   const [userCount, setUserCount] = useState(0);
   const [usersList, setUsersList] = useState<User[]>([]);
@@ -285,6 +285,7 @@ const VideoPlayer = () => {
         recentlyPlayedQueue={recentlyPlayedQueue}
         onVideoSelect={onVideoSelect}
         handleNext={handleNext}
+        setIsPlaying={setIsPlaying}
       />
       <UserSetting
         onVideoSelect={onVideoSelect}
