@@ -85,18 +85,21 @@ const Queue: FC<QueueProps> = ({
           >
             {currentVideo && (
               <div
+                className="relative"
                 style={{
                   width: isPlayerVisible ? "w-[224px] md:w-[280px]" : "0px",
                   height: isPlayerVisible ? "w-[224px] md:w-[280px]" : "0px",
                 }}
               >
                 <YouTube
+                  className="z-[1]"
                   videoId={currentVideo.id}
                   opts={opts}
                   onEnd={onEnd}
                   ref={playerRef}
                   onReady={onReady}
                 />
+                <div className="absolute bottom-0 left-0 z-10 h-16 w-full"></div>
               </div>
             )}
             <div className="flex flex-col gap-6">
