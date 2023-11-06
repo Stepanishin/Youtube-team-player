@@ -5,6 +5,21 @@ let userQueue = [];
 let RECENTLY_PLAYED = [];
 let USERS = [];
 let connectedUsers = 0;
+// Start time of the current video
+let currentVideoStartTime = Date.now();
+// Duration of the current video in milliseconds
+let currentVideoDuration = 0;
+
+const updateCurrentVideoTime = () => {
+  if (userQueue.length > 0) {
+    currentVideoDuration = Date.now() - currentVideoStartTime;
+  }
+};
+
+const resetCurrentVideoTime = () => {
+  currentVideoStartTime = Date.now();
+  currentVideoDuration = 0;
+};
 
 const registerSocketHandlers = (socket, io) => {
   connectedUsers++;
@@ -35,6 +50,12 @@ const registerSocketHandlers = (socket, io) => {
     }
 
     userQueue.push(video);
+
+    // Check if user length === 1
+    // In this case reset the current video time
+    if (userQueue.length === 1) {
+      resetCurrentVideoTime();
+    }
 
     // Sending the updated queue to all connected users
     io.emit("updateQueue", [...userQueue]);
@@ -71,6 +92,8 @@ const registerSocketHandlers = (socket, io) => {
       RECENTLY_PLAYED = [];
     }
 
+    // Resetting the current video time
+    resetCurrentVideoTime();
     // Sending the updated queue to all connected users
     io.emit("updateQueue", [...userQueue]);
     io.emit("updateRecentlyPlayedQueue", [...RECENTLY_PLAYED]);
@@ -115,10 +138,18 @@ const registerSocketHandlers = (socket, io) => {
         RECENTLY_PLAYED = [];
       }
 
+      // Resetting the current video time
+      resetCurrentVideoTime();
+
       // Sending the updated queue to all connected users
       io.emit("updateQueue", [...userQueue]);
       io.emit("updateRecentlyPlayedQueue", [...RECENTLY_PLAYED]);
     }
+  });
+
+  socket.on("requestCurrentTime", () => {
+    updateCurrentVideoTime();
+    socket.emit("currentVideoTime", currentVideoDuration);
   });
 
   socket.on("disconnect", () => {

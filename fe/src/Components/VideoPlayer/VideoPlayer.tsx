@@ -193,11 +193,22 @@ const VideoPlayer = () => {
         playerRef.current.internalPlayer.playVideo();
       }
       setIsPlaying(!isPlaying);
+      // Get current time from server
+      if (serverEndpoint) {
+        if (socketRef.current) {
+          socketRef.current.emit("requestCurrentTime");
+        }
+      }
 
       // Send current play state to server
       if (serverEndpoint) {
         if (socketRef.current) {
           socketRef.current.emit("togglePlayPause", !isPlaying);
+          socketRef.current.on("currentVideoTime", (time) => {
+            if (playerRef.current) {
+              (playerRef.current.internalPlayer as any).seekTo(time / 1000);
+            }
+          });
         }
       }
     }
